@@ -1,0 +1,1373 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="coqdoc.css" rel="stylesheet" type="text/css" />
+<title></title>
+</head>
+
+<body>
+
+<div id="page">
+
+<div id="header">
+</div>
+
+<div id="main">
+
+<h1 class="libtitle">Library mk_theorems</h1>
+
+<div class="code">
+
+<br/>
+</div>
+
+<div class="doc">
+mk_theorems 
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Export</span> <span class="id" title="var">mk_structure</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT4</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span> <span class="id" title="var">z</span>, <span class="id" title="var">z</span> ∈ <span class="id" title="var">x</span> \/ <span class="id" title="var">z</span> ∈ <span class="id" title="var">y</span> &lt;-&gt; <span class="id" title="var">z</span> ∈ (<span class="id" title="var">x</span> ∪ <span class="id" title="var">y</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT4'</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span> <span class="id" title="var">z</span>, <span class="id" title="var">z</span> ∈ <span class="id" title="var">x</span> /\ <span class="id" title="var">z</span> ∈ <span class="id" title="var">y</span> &lt;-&gt; <span class="id" title="var">z</span> ∈ (<span class="id" title="var">x</span> ∩ <span class="id" title="var">y</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Ltac</span> <span class="id" title="var">deHun</span> :=<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <span class="id" title="keyword">goal</span> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;| <span class="id" title="var">H</span>:  ?<span class="id" title="var">c</span> ∈ ?<span class="id" title="var">a</span>∪?<span class="id" title="var">b</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|- <span class="id" title="var">_</span> =&gt; <span class="id" title="tactic">apply</span> <span class="id" title="var">MKT4</span> <span class="id" title="tactic">in</span> <span class="id" title="var">H</span> <span class="id" title="keyword">as</span> [] ; <span class="id" title="var">deHun</span><br/>
+&nbsp;&nbsp;&nbsp;| <span class="id" title="var">_</span> =&gt; <span class="id" title="tactic">idtac</span><br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Ltac</span> <span class="id" title="var">deGun</span> :=<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <span class="id" title="keyword">goal</span> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| |-  ?<span class="id" title="var">c</span> ∈ ?<span class="id" title="var">a</span>∪?<span class="id" title="var">b</span> =&gt; <span class="id" title="tactic">apply</span> <span class="id" title="var">MKT4</span> ; <span class="id" title="var">deGun</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" title="var">_</span> =&gt; <span class="id" title="tactic">idtac</span><br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Ltac</span> <span class="id" title="var">deHin</span> :=<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <span class="id" title="keyword">goal</span> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;| <span class="id" title="var">H</span>:  ?<span class="id" title="var">c</span> ∈ ?<span class="id" title="var">a</span>∩?<span class="id" title="var">b</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|- <span class="id" title="var">_</span> =&gt; <span class="id" title="tactic">apply</span> <span class="id" title="var">MKT4'</span> <span class="id" title="tactic">in</span> <span class="id" title="var">H</span> <span class="id" title="keyword">as</span> []; <span class="id" title="var">deHin</span><br/>
+&nbsp;&nbsp;&nbsp;| <span class="id" title="var">_</span> =&gt; <span class="id" title="tactic">idtac</span>  <br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Ltac</span> <span class="id" title="var">deGin</span> :=<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <span class="id" title="keyword">goal</span> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| |- ?<span class="id" title="var">c</span> ∈ ?<span class="id" title="var">a</span>∩?<span class="id" title="var">b</span> =&gt; <span class="id" title="tactic">apply</span> <span class="id" title="var">MKT4'</span>; <span class="id" title="tactic">split</span>; <span class="id" title="var">deGin</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;| <span class="id" title="var">_</span> =&gt; <span class="id" title="tactic">idtac</span><br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT5</span> : ∀ <span class="id" title="var">x</span>, <span class="id" title="var">x</span> ∪ <span class="id" title="var">x</span> = <span class="id" title="var">x</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT5'</span> : ∀ <span class="id" title="var">x</span>, <span class="id" title="var">x</span> ∩ <span class="id" title="var">x</span> = <span class="id" title="var">x</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT6</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">x</span> ∪ <span class="id" title="var">y</span> = <span class="id" title="var">y</span> ∪ <span class="id" title="var">x</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT6'</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">x</span> ∩ <span class="id" title="var">y</span> = <span class="id" title="var">y</span> ∩ <span class="id" title="var">x</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT7</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span> <span class="id" title="var">z</span>, (<span class="id" title="var">x</span> ∪ <span class="id" title="var">y</span>) ∪ <span class="id" title="var">z</span> = <span class="id" title="var">x</span> ∪ (<span class="id" title="var">y</span> ∪ <span class="id" title="var">z</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT7'</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span> <span class="id" title="var">z</span>, (<span class="id" title="var">x</span> ∩ <span class="id" title="var">y</span>) ∩ <span class="id" title="var">z</span> = <span class="id" title="var">x</span> ∩ (<span class="id" title="var">y</span> ∩ <span class="id" title="var">z</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT8</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span> <span class="id" title="var">z</span>, <span class="id" title="var">x</span> ∩ (<span class="id" title="var">y</span> ∪ <span class="id" title="var">z</span>) = (<span class="id" title="var">x</span> ∩ <span class="id" title="var">y</span>) ∪ (<span class="id" title="var">x</span> ∩ <span class="id" title="var">z</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT8'</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span> <span class="id" title="var">z</span>, <span class="id" title="var">x</span> ∪ (<span class="id" title="var">y</span> ∩ <span class="id" title="var">z</span>) = (<span class="id" title="var">x</span> ∪ <span class="id" title="var">y</span>) ∩ (<span class="id" title="var">x</span> ∪ <span class="id" title="var">z</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT11</span>: ∀ <span class="id" title="var">x</span>, ¬ (¬ <span class="id" title="var">x</span>) = <span class="id" title="var">x</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT12</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span>, ¬ (<span class="id" title="var">x</span> ∪ <span class="id" title="var">y</span>) = (¬ <span class="id" title="var">x</span>) ∩ (¬ <span class="id" title="var">y</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT12'</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span>, ¬ (<span class="id" title="var">x</span> ∩ <span class="id" title="var">y</span>) = (¬ <span class="id" title="var">x</span>) ∪ (¬ <span class="id" title="var">y</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">setminP</span> : ∀ <span class="id" title="var">z</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">z</span> ∈ <span class="id" title="var">x</span> -&gt; ~ <span class="id" title="var">z</span> ∈ <span class="id" title="var">y</span> -&gt; <span class="id" title="var">z</span> ∈ (<span class="id" title="var">x</span> ~ <span class="id" title="var">y</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Global Hint Resolve</span> <span class="id" title="var">setminP</span> : <span class="id" title="var">core</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">setminp</span> : ∀ <span class="id" title="var">z</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">z</span> ∈ (<span class="id" title="var">x</span> ~ <span class="id" title="var">y</span>) -&gt; <span class="id" title="var">z</span> ∈ <span class="id" title="var">x</span> /\ ~ <span class="id" title="var">z</span> ∈ <span class="id" title="var">y</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT14</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span> <span class="id" title="var">z</span>, <span class="id" title="var">x</span> ∩ (<span class="id" title="var">y</span> ~ <span class="id" title="var">z</span>) = (<span class="id" title="var">x</span> ∩ <span class="id" title="var">y</span>) ~ <span class="id" title="var">z</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT16</span> : ∀ {<span class="id" title="var">x</span>}, <span class="id" title="var">x</span> ∉ <span class="id" title="var">Φ</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Ltac</span> <span class="id" title="var">emf</span> :=<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <span class="id" title="keyword">goal</span> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">H</span>:  ?<span class="id" title="var">a</span> ∈ <span class="id" title="var">Φ</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;|- <span class="id" title="var">_</span> =&gt; <span class="id" title="tactic">destruct</span> (<span class="id" title="var">MKT16</span> <span class="id" title="var">H</span>)<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Ltac</span> <span class="id" title="var">eqE</span> := <span class="id" title="var">eqext</span>; <span class="id" title="tactic">try</span> <span class="id" title="var">emf</span>; <span class="id" title="tactic">auto</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Ltac</span> <span class="id" title="var">feine</span> <span class="id" title="var">z</span> := <span class="id" title="tactic">destruct</span> (@ <span class="id" title="var">MKT16</span> <span class="id" title="var">z</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT17</span> : ∀ <span class="id" title="var">x</span>, <span class="id" title="var">Φ</span> ∪ <span class="id" title="var">x</span> = <span class="id" title="var">x</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT17'</span> : ∀ <span class="id" title="var">x</span>, <span class="id" title="var">Φ</span> ∩ <span class="id" title="var">x</span> = <span class="id" title="var">Φ</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT19</span> : ∀ <span class="id" title="var">x</span>, <span class="id" title="var">x</span> ∈ <span class="id" title="var">μ</span> &lt;-&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT19a</span> : ∀ <span class="id" title="var">x</span>, <span class="id" title="var">x</span> ∈ <span class="id" title="var">μ</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT19b</span> : ∀ <span class="id" title="var">x</span>, <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">x</span> ∈ <span class="id" title="var">μ</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Global Hint Resolve</span> <span class="id" title="var">MKT19a</span> <span class="id" title="var">MKT19b</span> : <span class="id" title="var">core</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT20</span> : ∀ <span class="id" title="var">x</span>, <span class="id" title="var">x</span> ∪ <span class="id" title="var">μ</span> = <span class="id" title="var">μ</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT20'</span> : ∀ <span class="id" title="var">x</span>, <span class="id" title="var">x</span> ∩ <span class="id" title="var">μ</span> = <span class="id" title="var">x</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT21</span> : ¬ <span class="id" title="var">Φ</span> = <span class="id" title="var">μ</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT21'</span> : ¬ <span class="id" title="var">μ</span> = <span class="id" title="var">Φ</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Ltac</span> <span class="id" title="var">deHex1</span> :=<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <span class="id" title="keyword">goal</span> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">H</span>: ∃ <span class="id" title="var">x</span>, ?<span class="id" title="var">P</span> <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;|- <span class="id" title="var">_</span> =&gt; <span class="id" title="tactic">destruct</span> <span class="id" title="var">H</span> <span class="id" title="keyword">as</span> []<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Ltac</span> <span class="id" title="var">rdeHex</span> := <span class="id" title="tactic">repeat</span> <span class="id" title="var">deHex1</span>; <span class="id" title="var">deand</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT24</span> : ∩<span class="id" title="var">Φ</span> = <span class="id" title="var">μ</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT24'</span> : ∪<span class="id" title="var">Φ</span> = <span class="id" title="var">Φ</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT26</span> : ∀ <span class="id" title="var">x</span>, <span class="id" title="var">Φ</span> ⊂ <span class="id" title="var">x</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT26'</span> : ∀ <span class="id" title="var">x</span>, <span class="id" title="var">x</span> ⊂ <span class="id" title="var">μ</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT26a</span> : ∀ <span class="id" title="var">x</span>, <span class="id" title="var">x</span> ⊂ <span class="id" title="var">x</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Global Hint Resolve</span> <span class="id" title="var">MKT26</span> <span class="id" title="var">MKT26'</span> <span class="id" title="var">MKT26a</span> : <span class="id" title="var">core</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">ssubs</span> : ∀ {<span class="id" title="var">a</span> <span class="id" title="var">b</span> <span class="id" title="var">z</span>}, <span class="id" title="var">z</span> ⊂ (<span class="id" title="var">a</span> ~ <span class="id" title="var">b</span>) -&gt; <span class="id" title="var">z</span> ⊂ <span class="id" title="var">a</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Global Hint Immediate</span> <span class="id" title="var">ssubs</span> : <span class="id" title="var">core</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">esube</span> : ∀ {<span class="id" title="var">z</span>}, <span class="id" title="var">z</span> ⊂ <span class="id" title="var">Φ</span> -&gt; <span class="id" title="var">z</span> = <span class="id" title="var">Φ</span>.<br/>
+ 
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT27</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span>, (<span class="id" title="var">x</span> ⊂ <span class="id" title="var">y</span> /\ <span class="id" title="var">y</span> ⊂ <span class="id" title="var">x</span>) &lt;-&gt; <span class="id" title="var">x</span> = <span class="id" title="var">y</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT28</span> : ∀ {<span class="id" title="var">x</span> <span class="id" title="var">y</span> <span class="id" title="var">z</span>}, <span class="id" title="var">x</span> ⊂ <span class="id" title="var">y</span> -&gt; <span class="id" title="var">y</span> ⊂ <span class="id" title="var">z</span> -&gt; <span class="id" title="var">x</span> ⊂ <span class="id" title="var">z</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT29</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">x</span> ∪ <span class="id" title="var">y</span> = <span class="id" title="var">y</span> &lt;-&gt; <span class="id" title="var">x</span> ⊂ <span class="id" title="var">y</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT30</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">x</span> ∩ <span class="id" title="var">y</span> = <span class="id" title="var">x</span> &lt;-&gt; <span class="id" title="var">x</span> ⊂ <span class="id" title="var">y</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT31</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">x</span> ⊂ <span class="id" title="var">y</span> -&gt; (∪<span class="id" title="var">x</span> ⊂ ∪<span class="id" title="var">y</span>) /\ (∩<span class="id" title="var">y</span> ⊂ ∩<span class="id" title="var">x</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT32</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">x</span> ∈ <span class="id" title="var">y</span> -&gt; (<span class="id" title="var">x</span> ⊂ ∪<span class="id" title="var">y</span>) /\ (∩<span class="id" title="var">y</span> ⊂ <span class="id" title="var">x</span>).<br/>
+
+<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT33</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">z</span>, <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">z</span> ⊂ <span class="id" title="var">x</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">z</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT34</span> : <span class="id" title="var">Φ</span> = ∩<span class="id" title="var">μ</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT34'</span> : <span class="id" title="var">μ</span> = ∪<span class="id" title="var">μ</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">NEexE</span> : ∀ <span class="id" title="var">x</span>, <span class="id" title="var">x</span> ≠ <span class="id" title="var">Φ</span> &lt;-&gt; ∃ <span class="id" title="var">z</span>, <span class="id" title="var">z</span>∈<span class="id" title="var">x</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Ltac</span> <span class="id" title="var">NEele</span> <span class="id" title="var">H</span> := <span class="id" title="tactic">apply</span> <span class="id" title="var">NEexE</span> <span class="id" title="tactic">in</span> <span class="id" title="var">H</span> <span class="id" title="keyword">as</span> [].<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT35</span> : ∀ <span class="id" title="var">x</span>, <span class="id" title="var">x</span> ≠ <span class="id" title="var">Φ</span> -&gt; <span class="id" title="var">Ensemble</span> (∩<span class="id" title="var">x</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT37</span> : <span class="id" title="var">μ</span> = <span class="id" title="var">pow</span>(<span class="id" title="var">μ</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT38a</span> : ∀ {<span class="id" title="var">x</span>}, <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">pow</span>(<span class="id" title="var">x</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT38b</span> : ∀ {<span class="id" title="var">x</span>}, <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> -&gt; (∀ <span class="id" title="var">y</span>, <span class="id" title="var">y</span> ⊂ <span class="id" title="var">x</span> &lt;-&gt; <span class="id" title="var">y</span> ∈ <span class="id" title="var">pow</span>(<span class="id" title="var">x</span>)).<br/>
+
+<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">Lemma_N</span> : ~ <span class="id" title="var">Ensemble</span> \{ <span class="id" title="var">λ</span> <span class="id" title="var">x</span>, <span class="id" title="var">x</span> ∉ <span class="id" title="var">x</span> \}.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT39</span> : ~ <span class="id" title="var">Ensemble</span> <span class="id" title="var">μ</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">singlex</span> : ∀ <span class="id" title="var">x</span>, <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">x</span> ∈ [<span class="id" title="var">x</span>].<br/>
+
+<br/>
+<span class="id" title="keyword">Global Hint Resolve</span> <span class="id" title="var">singlex</span> : <span class="id" title="var">core</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT41</span> : ∀ <span class="id" title="var">x</span>, <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> -&gt; (∀ <span class="id" title="var">y</span>, <span class="id" title="var">y</span> ∈ [<span class="id" title="var">x</span>] &lt;-&gt; <span class="id" title="var">y</span> = <span class="id" title="var">x</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Ltac</span> <span class="id" title="var">eins</span> <span class="id" title="var">H</span> := <span class="id" title="tactic">apply</span> <span class="id" title="var">MKT41</span> <span class="id" title="tactic">in</span> <span class="id" title="var">H</span>; <span class="id" title="tactic">subst</span>; <span class="id" title="tactic">eauto</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT42</span> : ∀ <span class="id" title="var">x</span>, <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">Ensemble</span> ([<span class="id" title="var">x</span>]).<br/>
+
+<br/>
+<span class="id" title="keyword">Global Hint Resolve</span> <span class="id" title="var">MKT42</span> : <span class="id" title="var">core</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT43</span> : ∀ <span class="id" title="var">x</span>, [<span class="id" title="var">x</span>] = <span class="id" title="var">μ</span> &lt;-&gt; ~ <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT42'</span> : ∀ <span class="id" title="var">x</span>, <span class="id" title="var">Ensemble</span> ([<span class="id" title="var">x</span>]) -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT44</span> : ∀ {<span class="id" title="var">x</span>}, <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> -&gt; ∩[<span class="id" title="var">x</span>] = <span class="id" title="var">x</span> /\ ∪[<span class="id" title="var">x</span>] = <span class="id" title="var">x</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT44'</span> : ∀ <span class="id" title="var">x</span>, ~ <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> -&gt; ∩[<span class="id" title="var">x</span>] = <span class="id" title="var">Φ</span> /\ ∪[<span class="id" title="var">x</span>] = <span class="id" title="var">μ</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Corollary</span> <span class="id" title="var">AxiomIV'</span>: ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">Ensemble</span> (<span class="id" title="var">x</span> ∪ <span class="id" title="var">y</span>)<br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> /\ <span class="id" title="var">Ensemble</span> <span class="id" title="var">y</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT46a</span> : ∀ {<span class="id" title="var">x</span> <span class="id" title="var">y</span>}, <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">y</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">Ensemble</span> ([<span class="id" title="var">x</span>|<span class="id" title="var">y</span>]).<br/>
+
+<br/>
+<span class="id" title="keyword">Global Hint Resolve</span> <span class="id" title="var">MKT46a</span> : <span class="id" title="var">core</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT46b</span> : ∀ {<span class="id" title="var">x</span> <span class="id" title="var">y</span>}, <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">y</span><br/>
+&nbsp;&nbsp;-&gt; (∀ <span class="id" title="var">z</span>, <span class="id" title="var">z</span> ∈ [<span class="id" title="var">x</span>|<span class="id" title="var">y</span>] &lt;-&gt; (<span class="id" title="var">z</span> = <span class="id" title="var">x</span> \/ <span class="id" title="var">z</span> = <span class="id" title="var">y</span>)).<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT46'</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span>, [<span class="id" title="var">x</span>|<span class="id" title="var">y</span>] = <span class="id" title="var">μ</span> &lt;-&gt; ~ <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> \/ ~ <span class="id" title="var">Ensemble</span> <span class="id" title="var">y</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT47a</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">y</span> -&gt; ∩[<span class="id" title="var">x</span>|<span class="id" title="var">y</span>] = <span class="id" title="var">x</span> ∩ <span class="id" title="var">y</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT47b</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">y</span><br/>
+&nbsp;&nbsp;-&gt; ∪[<span class="id" title="var">x</span>|<span class="id" title="var">y</span>] = <span class="id" title="var">x</span> ∪ <span class="id" title="var">y</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT47'</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span>, ~ <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> \/ ~ <span class="id" title="var">Ensemble</span> <span class="id" title="var">y</span><br/>
+&nbsp;&nbsp;-&gt; (∩[<span class="id" title="var">x</span>|<span class="id" title="var">y</span>] = <span class="id" title="var">Φ</span>) /\ (∪[<span class="id" title="var">x</span>|<span class="id" title="var">y</span>] = <span class="id" title="var">μ</span>).<br/>
+
+<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT49a</span> : ∀ {<span class="id" title="var">x</span> <span class="id" title="var">y</span>}, <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">y</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">Ensemble</span> ([<span class="id" title="var">x</span>,<span class="id" title="var">y</span>]).<br/>
+
+<br/>
+<span class="id" title="keyword">Global Hint Resolve</span> <span class="id" title="var">MKT49a</span> : <span class="id" title="var">core</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT49b</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">Ensemble</span> ([<span class="id" title="var">x</span>,<span class="id" title="var">y</span>]) -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> /\ <span class="id" title="var">Ensemble</span> <span class="id" title="var">y</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT49c1</span> : ∀ {<span class="id" title="var">x</span> <span class="id" title="var">y</span>}, <span class="id" title="var">Ensemble</span> ([<span class="id" title="var">x</span>,<span class="id" title="var">y</span>]) -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT49c2</span> : ∀ {<span class="id" title="var">x</span> <span class="id" title="var">y</span>}, <span class="id" title="var">Ensemble</span> ([<span class="id" title="var">x</span>,<span class="id" title="var">y</span>]) -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">y</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Ltac</span> <span class="id" title="var">ope1</span> :=<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <span class="id" title="keyword">goal</span> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">H</span>: <span class="id" title="var">Ensemble</span> ([?<span class="id" title="var">x</span>,?<span class="id" title="var">y</span>])<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;|- <span class="id" title="var">Ensemble</span> ?<span class="id" title="var">x</span> =&gt; <span class="id" title="tactic">eapply</span> <span class="id" title="var">MKT49c1</span>; <span class="id" title="tactic">eauto</span><br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Ltac</span> <span class="id" title="var">ope2</span> :=<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <span class="id" title="keyword">goal</span> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">H</span>: <span class="id" title="var">Ensemble</span> ([?<span class="id" title="var">x</span>,?<span class="id" title="var">y</span>])<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;|- <span class="id" title="var">Ensemble</span> ?<span class="id" title="var">y</span> =&gt; <span class="id" title="tactic">eapply</span> <span class="id" title="var">MKT49c2</span>; <span class="id" title="tactic">eauto</span><br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Ltac</span> <span class="id" title="var">ope3</span> :=<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <span class="id" title="keyword">goal</span> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">H</span>: [?<span class="id" title="var">x</span>,?<span class="id" title="var">y</span>] ∈ ?<span class="id" title="var">z</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;|- <span class="id" title="var">Ensemble</span> ?<span class="id" title="var">x</span> =&gt; <span class="id" title="tactic">eapply</span> <span class="id" title="var">MKT49c1</span>; <span class="id" title="tactic">eauto</span><br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Ltac</span> <span class="id" title="var">ope4</span> :=<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <span class="id" title="keyword">goal</span> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">H</span>: [?<span class="id" title="var">x</span>,?<span class="id" title="var">y</span>] ∈ ?<span class="id" title="var">z</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;|- <span class="id" title="var">Ensemble</span> ?<span class="id" title="var">y</span> =&gt; <span class="id" title="tactic">eapply</span> <span class="id" title="var">MKT49c2</span>; <span class="id" title="tactic">eauto</span><br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Ltac</span> <span class="id" title="var">ope</span> := <span class="id" title="tactic">try</span> <span class="id" title="var">ope1</span>; <span class="id" title="tactic">try</span> <span class="id" title="var">ope2</span>; <span class="id" title="tactic">try</span> <span class="id" title="var">ope3</span>; <span class="id" title="tactic">try</span> <span class="id" title="var">ope4</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT49'</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span>, ~ <span class="id" title="var">Ensemble</span> ([<span class="id" title="var">x</span>,<span class="id" title="var">y</span>]) -&gt; [<span class="id" title="var">x</span>,<span class="id" title="var">y</span>] = <span class="id" title="var">μ</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">subcp1</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">x</span> ⊂ (<span class="id" title="var">x</span> ∪ <span class="id" title="var">y</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Global Hint Resolve</span> <span class="id" title="var">subcp1</span> : <span class="id" title="var">core</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">Lemma50a</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">y</span> -&gt; ∪[<span class="id" title="var">x</span>,<span class="id" title="var">y</span>] = [<span class="id" title="var">x</span>|<span class="id" title="var">y</span>].<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">Lemma50b</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">y</span> -&gt; ∩[<span class="id" title="var">x</span>,<span class="id" title="var">y</span>] = [<span class="id" title="var">x</span>].<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT50</span> : ∀ {<span class="id" title="var">x</span> <span class="id" title="var">y</span>}, <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">y</span><br/>
+&nbsp;&nbsp;-&gt; (∪[<span class="id" title="var">x</span>,<span class="id" title="var">y</span>] = [<span class="id" title="var">x</span>|<span class="id" title="var">y</span>]) /\ (∩[<span class="id" title="var">x</span>,<span class="id" title="var">y</span>] = [<span class="id" title="var">x</span>]) /\ (∪(∩[<span class="id" title="var">x</span>,<span class="id" title="var">y</span>]) = <span class="id" title="var">x</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;/\ (∩(∩[<span class="id" title="var">x</span>,<span class="id" title="var">y</span>]) = <span class="id" title="var">x</span>) /\ (∪(∪[<span class="id" title="var">x</span>,<span class="id" title="var">y</span>]) = <span class="id" title="var">x</span>∪<span class="id" title="var">y</span>) /\ (∩(∪[<span class="id" title="var">x</span>,<span class="id" title="var">y</span>]) = <span class="id" title="var">x</span>∩<span class="id" title="var">y</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">Lemma50'</span> : ∀ (<span class="id" title="var">x</span> <span class="id" title="var">y</span>: <span class="id" title="keyword">Class</span>), ~ <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> \/ ~ <span class="id" title="var">Ensemble</span> <span class="id" title="var">y</span><br/>
+&nbsp;&nbsp;-&gt; ~ <span class="id" title="var">Ensemble</span> ([<span class="id" title="var">x</span>]) \/ ~ <span class="id" title="var">Ensemble</span> ([<span class="id" title="var">x</span> | <span class="id" title="var">y</span>]).<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT50'</span> : ∀ {<span class="id" title="var">x</span> <span class="id" title="var">y</span>}, ~ <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> \/ ~ <span class="id" title="var">Ensemble</span> <span class="id" title="var">y</span><br/>
+&nbsp;&nbsp;-&gt; (∪(∩[<span class="id" title="var">x</span>,<span class="id" title="var">y</span>]) = <span class="id" title="var">Φ</span>) /\ (∩(∩[<span class="id" title="var">x</span>,<span class="id" title="var">y</span>]) = <span class="id" title="var">μ</span>) /\ (∪(∪[<span class="id" title="var">x</span>,<span class="id" title="var">y</span>]) = <span class="id" title="var">μ</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;/\ (∩(∪[<span class="id" title="var">x</span>,<span class="id" title="var">y</span>]) = <span class="id" title="var">Φ</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Definition</span> <span class="id" title="var">First</span> <span class="id" title="var">z</span> := ∩(∩<span class="id" title="var">z</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Definition</span> <span class="id" title="var">Second</span> <span class="id" title="var">z</span> := (∩ ∪ <span class="id" title="var">z</span>) ∪ ((∪(∪<span class="id" title="var">z</span>)) ~ (∪(∩<span class="id" title="var">z</span>))).<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT53</span> : <span class="id" title="var">Second</span> <span class="id" title="var">μ</span> = <span class="id" title="var">μ</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT54a</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">y</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">First</span> ([<span class="id" title="var">x</span>,<span class="id" title="var">y</span>]) = <span class="id" title="var">x</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT54b</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">y</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">Second</span> ([<span class="id" title="var">x</span>,<span class="id" title="var">y</span>]) = <span class="id" title="var">y</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT54'</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span>, ~ <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> \/ ~ <span class="id" title="var">Ensemble</span> <span class="id" title="var">y</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">First</span> ([<span class="id" title="var">x</span>,<span class="id" title="var">y</span>]) = <span class="id" title="var">μ</span> /\ <span class="id" title="var">Second</span> ([<span class="id" title="var">x</span>,<span class="id" title="var">y</span>]) = <span class="id" title="var">μ</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT55</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span> <span class="id" title="var">u</span> <span class="id" title="var">v</span>, <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">y</span><br/>
+&nbsp;&nbsp;-&gt; ([<span class="id" title="var">x</span>,<span class="id" title="var">y</span>] = [<span class="id" title="var">u</span>,<span class="id" title="var">v</span>] &lt;-&gt; <span class="id" title="var">x</span> = <span class="id" title="var">u</span> /\ <span class="id" title="var">y</span> = <span class="id" title="var">v</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">Pins</span> : ∀ <span class="id" title="var">a</span> <span class="id" title="var">b</span> <span class="id" title="var">c</span> <span class="id" title="var">d</span>, <span class="id" title="var">Ensemble</span> <span class="id" title="var">c</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">d</span><br/>
+&nbsp;&nbsp;-&gt; [<span class="id" title="var">a</span>,<span class="id" title="var">b</span>] ∈ [[<span class="id" title="var">c</span>,<span class="id" title="var">d</span>]] -&gt; <span class="id" title="var">a</span> = <span class="id" title="var">c</span> /\ <span class="id" title="var">b</span> = <span class="id" title="var">d</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Ltac</span> <span class="id" title="var">pins</span> <span class="id" title="var">H</span> := <span class="id" title="tactic">apply</span> <span class="id" title="var">Pins</span> <span class="id" title="tactic">in</span> <span class="id" title="var">H</span> <span class="id" title="keyword">as</span> []; <span class="id" title="tactic">subst</span>; <span class="id" title="tactic">eauto</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">Pinfus</span> : ∀ <span class="id" title="var">a</span> <span class="id" title="var">b</span> <span class="id" title="var">f</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">y</span><br/>
+&nbsp;&nbsp;-&gt; [<span class="id" title="var">a</span>,<span class="id" title="var">b</span>] ∈ (<span class="id" title="var">f</span> ∪ [[<span class="id" title="var">x</span>,<span class="id" title="var">y</span>]]) -&gt; [<span class="id" title="var">a</span>,<span class="id" title="var">b</span>] ∈ <span class="id" title="var">f</span> \/ (<span class="id" title="var">a</span> = <span class="id" title="var">x</span> /\ <span class="id" title="var">b</span> = <span class="id" title="var">y</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Ltac</span> <span class="id" title="var">pinfus</span> <span class="id" title="var">H</span> := <span class="id" title="tactic">apply</span> <span class="id" title="var">Pinfus</span> <span class="id" title="tactic">in</span> <span class="id" title="var">H</span> <span class="id" title="keyword">as</span> [?|[]]; <span class="id" title="tactic">subst</span>; <span class="id" title="tactic">eauto</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Ltac</span> <span class="id" title="var">eincus</span> <span class="id" title="var">H</span> := <span class="id" title="tactic">apply</span> <span class="id" title="var">AxiomII</span> <span class="id" title="tactic">in</span> <span class="id" title="var">H</span> <span class="id" title="keyword">as</span> [<span class="id" title="var">_</span> [<span class="id" title="var">H</span>|<span class="id" title="var">H</span>]]; <span class="id" title="tactic">try</span> <span class="id" title="var">eins</span> <span class="id" title="var">H</span>; <span class="id" title="tactic">auto</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Ltac</span> <span class="id" title="var">PP</span> <span class="id" title="var">H</span> <span class="id" title="var">a</span> <span class="id" title="var">b</span> := <span class="id" title="tactic">apply</span> <span class="id" title="var">AxiomII</span> <span class="id" title="tactic">in</span> <span class="id" title="var">H</span> <span class="id" title="keyword">as</span> [? [<span class="id" title="var">a</span> [<span class="id" title="var">b</span> []]]]; <span class="id" title="tactic">subst</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">AxiomII'</span> : ∀ <span class="id" title="var">a</span> <span class="id" title="var">b</span> <span class="id" title="var">P</span>,<br/>
+&nbsp;&nbsp;[<span class="id" title="var">a</span>,<span class="id" title="var">b</span>] ∈ \{\ <span class="id" title="var">P</span> \}\ &lt;-&gt; <span class="id" title="var">Ensemble</span> ([<span class="id" title="var">a</span>,<span class="id" title="var">b</span>]) /\ (<span class="id" title="var">P</span> <span class="id" title="var">a</span> <span class="id" title="var">b</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Ltac</span> <span class="id" title="var">appoA2G</span> := <span class="id" title="tactic">apply</span> <span class="id" title="var">AxiomII'</span>; <span class="id" title="tactic">split</span>; <span class="id" title="tactic">eauto</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Ltac</span> <span class="id" title="var">appoA2H</span> <span class="id" title="var">H</span> := <span class="id" title="tactic">apply</span> <span class="id" title="var">AxiomII'</span> <span class="id" title="tactic">in</span> <span class="id" title="var">H</span> <span class="id" title="keyword">as</span> [].<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT58</span> : ∀ <span class="id" title="var">r</span> <span class="id" title="var">s</span> <span class="id" title="var">t</span>, (<span class="id" title="var">r</span> ∘ <span class="id" title="var">s</span>) ∘ <span class="id" title="var">t</span> = <span class="id" title="var">r</span> ∘ (<span class="id" title="var">s</span> ∘ <span class="id" title="var">t</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT59</span> : ∀ <span class="id" title="var">r</span> <span class="id" title="var">s</span> <span class="id" title="var">t</span>, <span class="id" title="var">Relation</span> <span class="id" title="var">r</span> -&gt; <span class="id" title="var">Relation</span> <span class="id" title="var">s</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">r</span> ∘ (<span class="id" title="var">s</span> ∪ <span class="id" title="var">t</span>) = (<span class="id" title="var">r</span> ∘ <span class="id" title="var">s</span>) ∪ (<span class="id" title="var">r</span> ∘ <span class="id" title="var">t</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;/\ <span class="id" title="var">r</span> ∘ (<span class="id" title="var">s</span> ∩ <span class="id" title="var">t</span>) ⊂ (<span class="id" title="var">r</span> ∘ <span class="id" title="var">s</span>) ∩ (<span class="id" title="var">r</span> ∘ <span class="id" title="var">t</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">invp1</span> : ∀ <span class="id" title="var">a</span> <span class="id" title="var">b</span> <span class="id" title="var">f</span>, [<span class="id" title="var">b</span>,<span class="id" title="var">a</span>] ∈ <span class="id" title="var">f⁻¹</span> &lt;-&gt; [<span class="id" title="var">a</span>,<span class="id" title="var">b</span>] ∈ <span class="id" title="var">f</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">uiv</span> : ∀ <span class="id" title="var">a</span> <span class="id" title="var">b</span>, (<span class="id" title="var">a</span> ∪ <span class="id" title="var">b</span>)<span class="id" title="var">⁻¹</span> = <span class="id" title="var">a⁻¹</span> ∪ <span class="id" title="var">b⁻¹</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">iiv</span> : ∀ <span class="id" title="var">a</span> <span class="id" title="var">b</span>, (<span class="id" title="var">a</span> ∩ <span class="id" title="var">b</span>)<span class="id" title="var">⁻¹</span> = <span class="id" title="var">a⁻¹</span> ∩ <span class="id" title="var">b⁻¹</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">siv</span> : ∀ <span class="id" title="var">a</span> <span class="id" title="var">b</span>, <span class="id" title="var">Ensemble</span> <span class="id" title="var">a</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">b</span> -&gt; [[<span class="id" title="var">a</span>,<span class="id" title="var">b</span>]]<span class="id" title="var">⁻¹</span> = [[<span class="id" title="var">b</span>,<span class="id" title="var">a</span>]].<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT61</span> : ∀ <span class="id" title="var">r</span>, <span class="id" title="var">Relation</span> <span class="id" title="var">r</span> -&gt; (<span class="id" title="var">r⁻¹</span>)<span class="id" title="var">⁻¹</span> = <span class="id" title="var">r</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT62</span> : ∀ <span class="id" title="var">r</span> <span class="id" title="var">s</span>, (<span class="id" title="var">r</span> ∘ <span class="id" title="var">s</span>)<span class="id" title="var">⁻¹</span> = (<span class="id" title="var">s⁻¹</span>) ∘ (<span class="id" title="var">r⁻¹</span>).<br/>
+
+<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">opisf</span> : ∀ <span class="id" title="var">a</span> <span class="id" title="var">b</span>, <span class="id" title="var">Ensemble</span> <span class="id" title="var">a</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">b</span> -&gt; <span class="id" title="keyword">Function</span> ([[<span class="id" title="var">a</span>,<span class="id" title="var">b</span>]]).<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">PisRel</span> : ∀ <span class="id" title="var">P</span>, <span class="id" title="var">Relation</span> \{\ <span class="id" title="var">P</span> \}\.<br/>
+
+<br/>
+<span class="id" title="keyword">Global Hint Resolve</span> <span class="id" title="var">PisRel</span> : <span class="id" title="var">core</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT64</span> : ∀ <span class="id" title="var">f</span> <span class="id" title="var">g</span>, <span class="id" title="keyword">Function</span> <span class="id" title="var">f</span> -&gt; <span class="id" title="keyword">Function</span> <span class="id" title="var">g</span> -&gt; <span class="id" title="keyword">Function</span> (<span class="id" title="var">f</span> ∘ <span class="id" title="var">g</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Corollary</span> <span class="id" title="var">Property_dom</span> : ∀ {<span class="id" title="var">x</span> <span class="id" title="var">y</span> <span class="id" title="var">f</span>}, [<span class="id" title="var">x</span>,<span class="id" title="var">y</span>] ∈ <span class="id" title="var">f</span> -&gt; <span class="id" title="var">x</span> ∈ <span class="id" title="var">dom</span>(<span class="id" title="var">f</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Corollary</span> <span class="id" title="var">Property_ran</span> : ∀ {<span class="id" title="var">x</span> <span class="id" title="var">y</span> <span class="id" title="var">f</span>}, [<span class="id" title="var">x</span>,<span class="id" title="var">y</span>] ∈ <span class="id" title="var">f</span> -&gt; <span class="id" title="var">y</span> ∈ <span class="id" title="var">ran</span>(<span class="id" title="var">f</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">deqri</span> : ∀ <span class="id" title="var">f</span>, <span class="id" title="var">dom</span>(<span class="id" title="var">f</span>) = <span class="id" title="var">ran</span>(<span class="id" title="var">f⁻¹</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">reqdi</span> : ∀ <span class="id" title="var">f</span>, <span class="id" title="var">ran</span>(<span class="id" title="var">f</span>) = <span class="id" title="var">dom</span>(<span class="id" title="var">f⁻¹</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">subdom</span> : ∀ {<span class="id" title="var">x</span> <span class="id" title="var">y</span>}, <span class="id" title="var">x</span> ⊂ <span class="id" title="var">y</span> -&gt; <span class="id" title="var">dom</span>(<span class="id" title="var">x</span>) ⊂ <span class="id" title="var">dom</span>(<span class="id" title="var">y</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">undom</span> : ∀ <span class="id" title="var">f</span> <span class="id" title="var">g</span>, <span class="id" title="var">dom</span>(<span class="id" title="var">f</span> ∪ <span class="id" title="var">g</span>) = <span class="id" title="var">dom</span>(<span class="id" title="var">f</span>) ∪ <span class="id" title="var">dom</span>(<span class="id" title="var">g</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">unran</span> : ∀ <span class="id" title="var">f</span> <span class="id" title="var">g</span>, <span class="id" title="var">ran</span>(<span class="id" title="var">f</span> ∪ <span class="id" title="var">g</span>) = <span class="id" title="var">ran</span>(<span class="id" title="var">f</span>) ∪ <span class="id" title="var">ran</span>(<span class="id" title="var">g</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">domor</span> : ∀ <span class="id" title="var">u</span> <span class="id" title="var">v</span>, <span class="id" title="var">Ensemble</span> <span class="id" title="var">u</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">v</span> -&gt; <span class="id" title="var">dom</span>([[<span class="id" title="var">u</span>,<span class="id" title="var">v</span>]]) = [<span class="id" title="var">u</span>].<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">ranor</span> : ∀ <span class="id" title="var">u</span> <span class="id" title="var">v</span>, <span class="id" title="var">Ensemble</span> <span class="id" title="var">u</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">v</span> -&gt; <span class="id" title="var">ran</span>([[<span class="id" title="var">u</span>,<span class="id" title="var">v</span>]]) = [<span class="id" title="var">v</span>].<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">fupf</span> : ∀ <span class="id" title="var">f</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="keyword">Function</span> <span class="id" title="var">f</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">y</span><br/>
+&nbsp;&nbsp;-&gt; ~ <span class="id" title="var">x</span> ∈ <span class="id" title="var">dom</span>(<span class="id" title="var">f</span>) -&gt; <span class="id" title="keyword">Function</span> (<span class="id" title="var">f</span> ∪ [[<span class="id" title="var">x</span>,<span class="id" title="var">y</span>]]).<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">dos1</span> : ∀ {<span class="id" title="var">f</span> <span class="id" title="var">x</span>} <span class="id" title="var">y</span>, <span class="id" title="keyword">Function</span> <span class="id" title="var">f</span> -&gt; [<span class="id" title="var">x</span>,<span class="id" title="var">y</span>] ∈ <span class="id" title="var">f</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">dom</span>(<span class="id" title="var">f</span> ~ [[<span class="id" title="var">x</span>,<span class="id" title="var">y</span>]]) = <span class="id" title="var">dom</span>(<span class="id" title="var">f</span>) ~ [<span class="id" title="var">x</span>].<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">ros1</span> : ∀ {<span class="id" title="var">f</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span>}, <span class="id" title="keyword">Function</span> <span class="id" title="var">f⁻¹</span> -&gt; [<span class="id" title="var">x</span>,<span class="id" title="var">y</span>] ∈ <span class="id" title="var">f</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">ran</span>(<span class="id" title="var">f</span> ~ [[<span class="id" title="var">x</span>,<span class="id" title="var">y</span>]]) = <span class="id" title="var">ran</span>(<span class="id" title="var">f</span>) ~ [<span class="id" title="var">y</span>].<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT67a</span>: <span class="id" title="var">dom</span>(<span class="id" title="var">μ</span>) = <span class="id" title="var">μ</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT67b</span>: <span class="id" title="var">ran</span>(<span class="id" title="var">μ</span>) = <span class="id" title="var">μ</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT69a</span> : ∀ {<span class="id" title="var">x</span> <span class="id" title="var">f</span>}, <span class="id" title="var">x</span> ∉ <span class="id" title="var">dom</span>(<span class="id" title="var">f</span>) -&gt; <span class="id" title="var">f</span>[<span class="id" title="var">x</span>] = <span class="id" title="var">μ</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT69b</span> : ∀ {<span class="id" title="var">x</span> <span class="id" title="var">f</span>}, <span class="id" title="var">x</span> ∈ <span class="id" title="var">dom</span>(<span class="id" title="var">f</span>) -&gt; <span class="id" title="var">f</span>[<span class="id" title="var">x</span>] ∈ <span class="id" title="var">μ</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT69a'</span> : ∀ {<span class="id" title="var">x</span> <span class="id" title="var">f</span>}, <span class="id" title="var">f</span>[<span class="id" title="var">x</span>] = <span class="id" title="var">μ</span> -&gt; <span class="id" title="var">x</span> ∉ <span class="id" title="var">dom</span>(<span class="id" title="var">f</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT69b'</span> : ∀ {<span class="id" title="var">x</span> <span class="id" title="var">f</span>}, <span class="id" title="var">f</span>[<span class="id" title="var">x</span>] ∈ <span class="id" title="var">μ</span> -&gt; <span class="id" title="var">x</span> ∈ <span class="id" title="var">dom</span>(<span class="id" title="var">f</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Corollary</span> <span class="id" title="var">Property_Fun</span> : ∀ <span class="id" title="var">y</span> <span class="id" title="var">f</span> <span class="id" title="var">x</span>, <span class="id" title="keyword">Function</span> <span class="id" title="var">f</span><br/>
+&nbsp;&nbsp;-&gt; [<span class="id" title="var">x</span>,<span class="id" title="var">y</span>] ∈ <span class="id" title="var">f</span> -&gt; <span class="id" title="var">y</span> = <span class="id" title="var">f</span>[<span class="id" title="var">x</span>].<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">uvinf</span> : ∀ <span class="id" title="var">z</span> <span class="id" title="var">a</span> <span class="id" title="var">b</span> <span class="id" title="var">f</span>, ~ <span class="id" title="var">a</span> ∈ <span class="id" title="var">dom</span>(<span class="id" title="var">f</span>) -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">a</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">b</span><br/>
+&nbsp;&nbsp;-&gt; (<span class="id" title="var">z</span> ∈ <span class="id" title="var">dom</span>(<span class="id" title="var">f</span>) -&gt; (<span class="id" title="var">f</span> ∪ [[<span class="id" title="var">a</span>,<span class="id" title="var">b</span>]])[<span class="id" title="var">z</span>] = <span class="id" title="var">f</span>[<span class="id" title="var">z</span>]).<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">uvinp</span> : ∀ <span class="id" title="var">a</span> <span class="id" title="var">b</span> <span class="id" title="var">f</span>, ~ <span class="id" title="var">a</span> ∈ <span class="id" title="var">dom</span>(<span class="id" title="var">f</span>) -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">a</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">b</span><br/>
+&nbsp;&nbsp;-&gt; (<span class="id" title="var">f</span> ∪ [[<span class="id" title="var">a</span>,<span class="id" title="var">b</span>]])[<span class="id" title="var">a</span>] = <span class="id" title="var">b</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">Einr</span> : ∀ {<span class="id" title="var">f</span> <span class="id" title="var">z</span>}, <span class="id" title="keyword">Function</span> <span class="id" title="var">f</span> -&gt; <span class="id" title="var">z</span> ∈ <span class="id" title="var">ran</span>(<span class="id" title="var">f</span>)<br/>
+&nbsp;&nbsp;-&gt; ∃ <span class="id" title="var">x</span>, <span class="id" title="var">x</span> ∈ <span class="id" title="var">dom</span>(<span class="id" title="var">f</span>) /\ <span class="id" title="var">z</span> = <span class="id" title="var">f</span>[<span class="id" title="var">x</span>].<br/>
+
+<br/>
+<span class="id" title="keyword">Ltac</span> <span class="id" title="var">einr</span> <span class="id" title="var">H</span> := <span class="id" title="var">New</span> <span class="id" title="var">H</span>; <span class="id" title="tactic">apply</span> <span class="id" title="var">Einr</span> <span class="id" title="tactic">in</span> <span class="id" title="var">H</span> <span class="id" title="keyword">as</span> [? []]; <span class="id" title="tactic">subst</span>; <span class="id" title="tactic">auto</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT70</span> : ∀ <span class="id" title="var">f</span>, <span class="id" title="keyword">Function</span> <span class="id" title="var">f</span> -&gt; <span class="id" title="var">f</span> = \{\ <span class="id" title="var">λ</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">y</span> = <span class="id" title="var">f</span>[<span class="id" title="var">x</span>] \}\.<br/>
+
+<br/>
+<span class="id" title="keyword">Corollary</span> <span class="id" title="var">Property_Value</span> : ∀ {<span class="id" title="var">f</span> <span class="id" title="var">x</span>}, <span class="id" title="keyword">Function</span> <span class="id" title="var">f</span> -&gt; <span class="id" title="var">x</span> ∈ <span class="id" title="var">dom</span>(<span class="id" title="var">f</span>)<br/>
+&nbsp;&nbsp;-&gt; [<span class="id" title="var">x</span>,<span class="id" title="var">f</span>[<span class="id" title="var">x</span>]] ∈ <span class="id" title="var">f</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">subval</span> : ∀ {<span class="id" title="var">f</span> <span class="id" title="var">g</span>}, <span class="id" title="var">f</span> ⊂ <span class="id" title="var">g</span> -&gt; <span class="id" title="keyword">Function</span> <span class="id" title="var">f</span> -&gt; <span class="id" title="keyword">Function</span> <span class="id" title="var">g</span><br/>
+&nbsp;&nbsp;-&gt; ∀ <span class="id" title="var">u</span>, <span class="id" title="var">u</span> ∈ <span class="id" title="var">dom</span>(<span class="id" title="var">f</span>) -&gt; <span class="id" title="var">f</span>[<span class="id" title="var">u</span>] = <span class="id" title="var">g</span>[<span class="id" title="var">u</span>].<br/>
+
+<br/>
+<span class="id" title="keyword">Corollary</span> <span class="id" title="var">Property_Value'</span> : ∀ <span class="id" title="var">f</span> <span class="id" title="var">x</span>, <span class="id" title="keyword">Function</span> <span class="id" title="var">f</span> -&gt; <span class="id" title="var">f</span>[<span class="id" title="var">x</span>] ∈ <span class="id" title="var">ran</span>(<span class="id" title="var">f</span>)<br/>
+&nbsp;&nbsp;-&gt; [<span class="id" title="var">x</span>,<span class="id" title="var">f</span>[<span class="id" title="var">x</span>]] ∈ <span class="id" title="var">f</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Corollary</span> <span class="id" title="var">Property_dm</span> : ∀ {<span class="id" title="var">f</span> <span class="id" title="var">x</span>}, <span class="id" title="keyword">Function</span> <span class="id" title="var">f</span> -&gt; <span class="id" title="var">x</span> ∈ <span class="id" title="var">dom</span>(<span class="id" title="var">f</span>)<br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">f</span>[<span class="id" title="var">x</span>] ∈ <span class="id" title="var">ran</span>(<span class="id" title="var">f</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT71</span> : ∀ <span class="id" title="var">f</span> <span class="id" title="var">g</span>, <span class="id" title="keyword">Function</span> <span class="id" title="var">f</span> -&gt; <span class="id" title="keyword">Function</span> <span class="id" title="var">g</span><br/>
+&nbsp;&nbsp;-&gt; (<span class="id" title="var">f</span> = <span class="id" title="var">g</span> &lt;-&gt; ∀ <span class="id" title="var">x</span>, <span class="id" title="var">f</span>[<span class="id" title="var">x</span>] = <span class="id" title="var">g</span>[<span class="id" title="var">x</span>]).<br/>
+
+<br/>
+<span class="id" title="keyword">Ltac</span> <span class="id" title="var">xo</span> :=<br/>
+&nbsp;&nbsp;<span class="id" title="keyword">match</span> <span class="id" title="keyword">goal</span> <span class="id" title="keyword">with</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;|- <span class="id" title="var">Ensemble</span> ([?<span class="id" title="var">a</span>, ?<span class="id" title="var">b</span>]) =&gt; <span class="id" title="tactic">try</span> <span class="id" title="tactic">apply</span> <span class="id" title="var">MKT49a</span><br/>
+&nbsp;&nbsp;<span class="id" title="keyword">end</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Ltac</span> <span class="id" title="var">rxo</span> := <span class="id" title="tactic">eauto</span>; <span class="id" title="tactic">repeat</span> <span class="id" title="var">xo</span>; <span class="id" title="tactic">eauto</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">Ex_Lemma73</span> : ∀ {<span class="id" title="var">u</span> <span class="id" title="var">y</span>}, <span class="id" title="var">Ensemble</span> <span class="id" title="var">u</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">y</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="keyword">let</span> <span class="id" title="var">f</span>:= \{\ <span class="id" title="var">λ</span> <span class="id" title="var">w</span> <span class="id" title="var">z</span>, <span class="id" title="var">w</span> ∈ <span class="id" title="var">y</span> /\ <span class="id" title="var">z</span> = [<span class="id" title="var">u</span>,<span class="id" title="var">w</span>] \}\ <span class="id" title="tactic">in</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Function</span> <span class="id" title="var">f</span> /\ <span class="id" title="var">dom</span>(<span class="id" title="var">f</span>) = <span class="id" title="var">y</span> /\ <span class="id" title="var">ran</span>(<span class="id" title="var">f</span>) = [<span class="id" title="var">u</span>] × <span class="id" title="var">y</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT73</span> : ∀ <span class="id" title="var">u</span> <span class="id" title="var">y</span>, <span class="id" title="var">Ensemble</span> <span class="id" title="var">u</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">y</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">Ensemble</span> ([<span class="id" title="var">u</span>] × <span class="id" title="var">y</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">Ex_Lemma74</span> : ∀ {<span class="id" title="var">x</span> <span class="id" title="var">y</span>}, <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">y</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="keyword">let</span> <span class="id" title="var">f</span> := \{\ <span class="id" title="var">λ</span> <span class="id" title="var">u</span> <span class="id" title="var">z</span>, <span class="id" title="var">u</span> ∈ <span class="id" title="var">x</span> /\ <span class="id" title="var">z</span> = [<span class="id" title="var">u</span>] × <span class="id" title="var">y</span> \}\ <span class="id" title="tactic">in</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Function</span> <span class="id" title="var">f</span> /\ <span class="id" title="var">dom</span>(<span class="id" title="var">f</span>) = <span class="id" title="var">x</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;/\ <span class="id" title="var">ran</span>(<span class="id" title="var">f</span>) = \{ <span class="id" title="var">λ</span> <span class="id" title="var">z</span>, ∃ <span class="id" title="var">u</span>, <span class="id" title="var">u</span> ∈ <span class="id" title="var">x</span> /\ <span class="id" title="var">z</span> = [<span class="id" title="var">u</span>] × <span class="id" title="var">y</span> \}.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">Lemma74</span> : ∀ {<span class="id" title="var">x</span> <span class="id" title="var">y</span>}, <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">y</span><br/>
+&nbsp;&nbsp;-&gt; ∪(\{ <span class="id" title="var">λ</span> <span class="id" title="var">z</span>, ∃ <span class="id" title="var">u</span>, <span class="id" title="var">u</span> ∈ <span class="id" title="var">x</span> /\ <span class="id" title="var">z</span> = [<span class="id" title="var">u</span>] × <span class="id" title="var">y</span> \}) = <span class="id" title="var">x</span> × <span class="id" title="var">y</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT74</span> : ∀ {<span class="id" title="var">x</span> <span class="id" title="var">y</span>}, <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">y</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">Ensemble</span> (<span class="id" title="var">x</span> × <span class="id" title="var">y</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT75</span> : ∀ <span class="id" title="var">f</span>, <span class="id" title="keyword">Function</span> <span class="id" title="var">f</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">dom</span>(<span class="id" title="var">f</span>) -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">f</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">fdme</span> : ∀ {<span class="id" title="var">f</span>}, <span class="id" title="keyword">Function</span> <span class="id" title="var">f</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">f</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">dom</span>(<span class="id" title="var">f</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">frne</span> : ∀ {<span class="id" title="var">f</span>}, <span class="id" title="keyword">Function</span> <span class="id" title="var">f</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">f</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">ran</span>(<span class="id" title="var">f</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT77</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">y</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">Ensemble</span> (<span class="id" title="var">Exponent</span> <span class="id" title="var">y</span> <span class="id" title="var">x</span>).<br/>
+
+<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">Property_Asy</span> : ∀ {<span class="id" title="var">r</span> <span class="id" title="var">x</span> <span class="id" title="var">u</span>}, <span class="id" title="var">Asymmetric</span> <span class="id" title="var">r</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">u</span> ∈ <span class="id" title="var">x</span><br/>
+&nbsp;&nbsp;-&gt; ~ <span class="id" title="var">Rrelation</span> <span class="id" title="var">u</span> <span class="id" title="var">r</span> <span class="id" title="var">u</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Corollary</span> <span class="id" title="var">wosub</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">r</span> <span class="id" title="var">y</span>, <span class="id" title="var">WellOrdered</span> <span class="id" title="var">r</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">y</span> ⊂ <span class="id" title="var">x</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">WellOrdered</span> <span class="id" title="var">r</span> <span class="id" title="var">y</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT88a</span> : ∀ {<span class="id" title="var">r</span> <span class="id" title="var">x</span>}, <span class="id" title="var">WellOrdered</span> <span class="id" title="var">r</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">Asymmetric</span> <span class="id" title="var">r</span> <span class="id" title="var">x</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT88b</span> : ∀ <span class="id" title="var">r</span> <span class="id" title="var">x</span>, <span class="id" title="var">WellOrdered</span> <span class="id" title="var">r</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">Transitive</span> <span class="id" title="var">r</span> <span class="id" title="var">x</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT90</span> : ∀ <span class="id" title="var">n</span> <span class="id" title="var">x</span> <span class="id" title="var">r</span>, <span class="id" title="var">n</span> ≠ <span class="id" title="var">Φ</span> -&gt; (∀ <span class="id" title="var">y</span>, <span class="id" title="var">y</span> ∈ <span class="id" title="var">n</span> -&gt; <span class="id" title="var">rSection</span> <span class="id" title="var">y</span> <span class="id" title="var">r</span> <span class="id" title="var">x</span>)<br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">rSection</span> (∩<span class="id" title="var">n</span>) <span class="id" title="var">r</span> <span class="id" title="var">x</span> /\ <span class="id" title="var">rSection</span> (∪<span class="id" title="var">n</span>) <span class="id" title="var">r</span> <span class="id" title="var">x</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT91</span> : ∀ {<span class="id" title="var">x</span> <span class="id" title="var">y</span> <span class="id" title="var">r</span>}, <span class="id" title="var">rSection</span> <span class="id" title="var">y</span> <span class="id" title="var">r</span> <span class="id" title="var">x</span> -&gt;  <span class="id" title="var">y</span> &lt;&gt; <span class="id" title="var">x</span><br/>
+&nbsp;&nbsp;-&gt; (∃ <span class="id" title="var">v</span>, <span class="id" title="var">v</span> ∈ <span class="id" title="var">x</span> /\ <span class="id" title="var">y</span> = \{ <span class="id" title="var">λ</span> <span class="id" title="var">u</span>, <span class="id" title="var">u</span> ∈ <span class="id" title="var">x</span> /\ <span class="id" title="var">Rrelation</span> <span class="id" title="var">u</span> <span class="id" title="var">r</span> <span class="id" title="var">v</span> \}).<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT92</span> : ∀ {<span class="id" title="var">x</span> <span class="id" title="var">y</span> <span class="id" title="var">z</span> <span class="id" title="var">r</span>}, <span class="id" title="var">rSection</span> <span class="id" title="var">x</span> <span class="id" title="var">r</span> <span class="id" title="var">z</span> -&gt; <span class="id" title="var">rSection</span> <span class="id" title="var">y</span> <span class="id" title="var">r</span> <span class="id" title="var">z</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">x</span> ⊂ <span class="id" title="var">y</span> \/ <span class="id" title="var">y</span> ⊂ <span class="id" title="var">x</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT94</span> : ∀ {<span class="id" title="var">x</span> <span class="id" title="var">r</span> <span class="id" title="var">y</span> <span class="id" title="var">f</span>}, <span class="id" title="var">rSection</span> <span class="id" title="var">x</span> <span class="id" title="var">r</span> <span class="id" title="var">y</span> -&gt; <span class="id" title="var">Order_Pr</span> <span class="id" title="var">f</span> <span class="id" title="var">r</span> <span class="id" title="var">r</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="keyword">On</span> <span class="id" title="var">f</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">To</span> <span class="id" title="var">f</span> <span class="id" title="var">y</span> -&gt; (∀ <span class="id" title="var">u</span>, <span class="id" title="var">u</span> ∈ <span class="id" title="var">x</span> -&gt; ~ <span class="id" title="var">Rrelation</span> <span class="id" title="var">f</span>[<span class="id" title="var">u</span>] <span class="id" title="var">r</span> <span class="id" title="var">u</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">f11vi</span> : ∀ <span class="id" title="var">f</span> <span class="id" title="var">u</span>, <span class="id" title="keyword">Function</span> <span class="id" title="var">f</span> -&gt; <span class="id" title="keyword">Function</span> <span class="id" title="var">f⁻¹</span> -&gt; <span class="id" title="var">u</span> ∈ <span class="id" title="var">ran</span>(<span class="id" title="var">f</span>)<br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">f</span>[(<span class="id" title="var">f⁻¹</span>)[<span class="id" title="var">u</span>]] = <span class="id" title="var">u</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">f11inj</span> : ∀ <span class="id" title="var">f</span> <span class="id" title="var">a</span> <span class="id" title="var">b</span>, <span class="id" title="keyword">Function</span> <span class="id" title="var">f</span> -&gt; <span class="id" title="keyword">Function</span> <span class="id" title="var">f⁻¹</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">a</span> ∈ <span class="id" title="var">dom</span>(<span class="id" title="var">f</span>) -&gt; <span class="id" title="var">b</span> ∈ <span class="id" title="var">dom</span>(<span class="id" title="var">f</span>) -&gt; <span class="id" title="var">f</span>[<span class="id" title="var">a</span>] = <span class="id" title="var">f</span>[<span class="id" title="var">b</span>] -&gt; <span class="id" title="var">a</span> = <span class="id" title="var">b</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">f11iv</span> : ∀ <span class="id" title="var">f</span> <span class="id" title="var">u</span>, <span class="id" title="keyword">Function</span> <span class="id" title="var">f</span> -&gt; <span class="id" title="keyword">Function</span> <span class="id" title="var">f⁻¹</span> -&gt; <span class="id" title="var">u</span> ∈ <span class="id" title="var">dom</span>(<span class="id" title="var">f</span>)<br/>
+&nbsp;&nbsp;-&gt; (<span class="id" title="var">f⁻¹</span>)[<span class="id" title="var">f</span>[<span class="id" title="var">u</span>]] = <span class="id" title="var">u</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">f11pa</span> : ∀ {<span class="id" title="var">f</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span>}, <span class="id" title="var">Function1_1</span> <span class="id" title="var">f</span> -&gt; [<span class="id" title="var">x</span>,<span class="id" title="var">y</span>] ∈ <span class="id" title="var">f</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">Function1_1</span> (<span class="id" title="var">f</span> ~ [[<span class="id" title="var">x</span>,<span class="id" title="var">y</span>]]).<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">f11pb</span> : ∀ <span class="id" title="var">f</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">Function1_1</span> <span class="id" title="var">f</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">y</span><br/>
+&nbsp;&nbsp;-&gt; ~ <span class="id" title="var">x</span> ∈ <span class="id" title="var">dom</span>(<span class="id" title="var">f</span>) -&gt; ~ <span class="id" title="var">y</span> ∈ <span class="id" title="var">ran</span>(<span class="id" title="var">f</span>) -&gt; <span class="id" title="var">Function1_1</span> (<span class="id" title="var">f</span> ∪ [[<span class="id" title="var">x</span>,<span class="id" title="var">y</span>]]).<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT96a</span> : ∀ {<span class="id" title="var">f</span> <span class="id" title="var">r</span> <span class="id" title="var">s</span>}, <span class="id" title="var">Order_Pr</span> <span class="id" title="var">f</span> <span class="id" title="var">r</span> <span class="id" title="var">s</span> -&gt; <span class="id" title="var">Function1_1</span> <span class="id" title="var">f</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT96b</span> : ∀ {<span class="id" title="var">f</span> <span class="id" title="var">r</span> <span class="id" title="var">s</span>}, <span class="id" title="var">Order_Pr</span> <span class="id" title="var">f</span> <span class="id" title="var">r</span> <span class="id" title="var">s</span> -&gt; <span class="id" title="var">Order_Pr</span> (<span class="id" title="var">f⁻¹</span>) <span class="id" title="var">s</span> <span class="id" title="var">r</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT96</span> : ∀ <span class="id" title="var">f</span> <span class="id" title="var">r</span> <span class="id" title="var">s</span>, <span class="id" title="var">Order_Pr</span> <span class="id" title="var">f</span> <span class="id" title="var">r</span> <span class="id" title="var">s</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">Function1_1</span> <span class="id" title="var">f</span> /\ <span class="id" title="var">Order_Pr</span> (<span class="id" title="var">f⁻¹</span>) <span class="id" title="var">s</span> <span class="id" title="var">r</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">lem97a</span> :  ∀ <span class="id" title="var">f</span> <span class="id" title="var">g</span> <span class="id" title="var">u</span> <span class="id" title="var">r</span> <span class="id" title="var">s</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">Order_Pr</span> <span class="id" title="var">f</span> <span class="id" title="var">r</span> <span class="id" title="var">s</span> -&gt; <span class="id" title="var">Order_Pr</span> <span class="id" title="var">g</span> <span class="id" title="var">r</span> <span class="id" title="var">s</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">rSection</span> <span class="id" title="var">dom</span>(<span class="id" title="var">f</span>) <span class="id" title="var">r</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">rSection</span> <span class="id" title="var">dom</span>(<span class="id" title="var">g</span>) <span class="id" title="var">r</span> <span class="id" title="var">x</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">rSection</span> <span class="id" title="var">ran</span>(<span class="id" title="var">f</span>) <span class="id" title="var">s</span> <span class="id" title="var">y</span> -&gt; <span class="id" title="var">rSection</span> <span class="id" title="var">ran</span>(<span class="id" title="var">g</span>) <span class="id" title="var">s</span> <span class="id" title="var">y</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">FirstMember</span> <span class="id" title="var">u</span> <span class="id" title="var">r</span> (\{ <span class="id" title="var">λ</span> <span class="id" title="var">a</span>, <span class="id" title="var">a</span> ∈ (<span class="id" title="var">dom</span>(<span class="id" title="var">f</span>) ∩ <span class="id" title="var">dom</span>(<span class="id" title="var">g</span>))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;/\ <span class="id" title="var">f</span> [<span class="id" title="var">a</span>] &lt;&gt; <span class="id" title="var">g</span> [<span class="id" title="var">a</span>] \}) -&gt; <span class="id" title="var">Rrelation</span> <span class="id" title="var">f</span>[<span class="id" title="var">u</span>] <span class="id" title="var">s</span> <span class="id" title="var">g</span>[<span class="id" title="var">u</span>] -&gt; <span class="id" title="var">False</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">le97</span> : ∀ <span class="id" title="var">f</span> <span class="id" title="var">g</span>, <span class="id" title="keyword">Function</span> <span class="id" title="var">f</span> -&gt; <span class="id" title="keyword">Function</span> <span class="id" title="var">g</span><br/>
+&nbsp;&nbsp;-&gt; (∀ <span class="id" title="var">a</span>, <span class="id" title="var">a</span> ∈ (<span class="id" title="var">dom</span>(<span class="id" title="var">f</span>) ∩ <span class="id" title="var">dom</span>(<span class="id" title="var">g</span>)) -&gt; <span class="id" title="var">f</span>[<span class="id" title="var">a</span>] = <span class="id" title="var">g</span>[<span class="id" title="var">a</span>])<br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">dom</span>(<span class="id" title="var">f</span>) ⊂ <span class="id" title="var">dom</span>(<span class="id" title="var">g</span>) -&gt; <span class="id" title="var">f</span> ⊂ <span class="id" title="var">g</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT97</span> :  ∀ {<span class="id" title="var">f</span> <span class="id" title="var">g</span> <span class="id" title="var">r</span> <span class="id" title="var">s</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span>}, <span class="id" title="var">Order_Pr</span> <span class="id" title="var">f</span> <span class="id" title="var">r</span> <span class="id" title="var">s</span> -&gt; <span class="id" title="var">Order_Pr</span> <span class="id" title="var">g</span> <span class="id" title="var">r</span> <span class="id" title="var">s</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">rSection</span> <span class="id" title="var">dom</span>(<span class="id" title="var">f</span>) <span class="id" title="var">r</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">rSection</span> <span class="id" title="var">dom</span>(<span class="id" title="var">g</span>) <span class="id" title="var">r</span> <span class="id" title="var">x</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">rSection</span> <span class="id" title="var">ran</span>(<span class="id" title="var">f</span>) <span class="id" title="var">s</span> <span class="id" title="var">y</span> -&gt; <span class="id" title="var">rSection</span> <span class="id" title="var">ran</span>(<span class="id" title="var">g</span>) <span class="id" title="var">s</span> <span class="id" title="var">y</span> -&gt; <span class="id" title="var">f</span> ⊂ <span class="id" title="var">g</span> \/ <span class="id" title="var">g</span> ⊂ <span class="id" title="var">f</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">Lemma99c</span> : ∀ <span class="id" title="var">y</span> <span class="id" title="var">r</span> <span class="id" title="var">x</span> <span class="id" title="var">a</span> <span class="id" title="var">b</span>, <span class="id" title="var">rSection</span> <span class="id" title="var">y</span> <span class="id" title="var">r</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">a</span> ∈ <span class="id" title="var">y</span> -&gt; ~ <span class="id" title="var">b</span> ∈ <span class="id" title="var">y</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">b</span> ∈ <span class="id" title="var">x</span> -&gt; <span class="id" title="var">Rrelation</span> <span class="id" title="var">a</span> <span class="id" title="var">r</span> <span class="id" title="var">b</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Ltac</span> <span class="id" title="var">RN</span> <span class="id" title="var">a</span> <span class="id" title="var">b</span> := <span class="id" title="tactic">rename</span> <span class="id" title="var">a</span> <span class="id" title="var">into</span> <span class="id" title="var">b</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT99</span> : ∀ {<span class="id" title="var">r</span> <span class="id" title="var">s</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span>}, <span class="id" title="var">WellOrdered</span> <span class="id" title="var">r</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">WellOrdered</span> <span class="id" title="var">s</span> <span class="id" title="var">y</span><br/>
+&nbsp;&nbsp;-&gt; ∃ <span class="id" title="var">f</span>, <span class="id" title="keyword">Function</span> <span class="id" title="var">f</span> /\ <span class="id" title="var">Order_PXY</span> <span class="id" title="var">f</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span> <span class="id" title="var">r</span> <span class="id" title="var">s</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;/\(<span class="id" title="var">dom</span>(<span class="id" title="var">f</span>) = <span class="id" title="var">x</span> \/ <span class="id" title="var">ran</span>(<span class="id" title="var">f</span>) = <span class="id" title="var">y</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT100</span> : ∀ {<span class="id" title="var">r</span> <span class="id" title="var">s</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span>}, <span class="id" title="var">WellOrdered</span> <span class="id" title="var">r</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">WellOrdered</span> <span class="id" title="var">s</span> <span class="id" title="var">y</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> -&gt; ~ <span class="id" title="var">Ensemble</span> <span class="id" title="var">y</span> -&gt; ∃ <span class="id" title="var">f</span>, <span class="id" title="keyword">Function</span> <span class="id" title="var">f</span><br/>
+&nbsp;&nbsp;&nbsp;&nbsp;/\ <span class="id" title="var">Order_PXY</span> <span class="id" title="var">f</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span> <span class="id" title="var">r</span> <span class="id" title="var">s</span> /\ <span class="id" title="var">dom</span>( <span class="id" title="var">f</span>) = <span class="id" title="var">x</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT100'</span> : ∀ <span class="id" title="var">r</span> <span class="id" title="var">s</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">WellOrdered</span> <span class="id" title="var">r</span> <span class="id" title="var">x</span> /\ <span class="id" title="var">WellOrdered</span> <span class="id" title="var">s</span> <span class="id" title="var">y</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> -&gt; ~ <span class="id" title="var">Ensemble</span> <span class="id" title="var">y</span><br/>
+&nbsp;&nbsp;-&gt; ∀ <span class="id" title="var">f</span>, <span class="id" title="keyword">Function</span> <span class="id" title="var">f</span> /\ <span class="id" title="var">Order_PXY</span> <span class="id" title="var">f</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span> <span class="id" title="var">r</span> <span class="id" title="var">s</span> /\ <span class="id" title="var">dom</span>(<span class="id" title="var">f</span>) = <span class="id" title="var">x</span><br/>
+&nbsp;&nbsp;-&gt; ∀ <span class="id" title="var">g</span>, <span class="id" title="keyword">Function</span> <span class="id" title="var">g</span> /\ <span class="id" title="var">Order_PXY</span> <span class="id" title="var">g</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span> <span class="id" title="var">r</span> <span class="id" title="var">s</span> /\ <span class="id" title="var">dom</span>(<span class="id" title="var">g</span>) = <span class="id" title="var">x</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">f</span> = <span class="id" title="var">g</span>.<br/>
+
+<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT101</span> : ∀ <span class="id" title="var">x</span>, <span class="id" title="var">x</span> ∉ <span class="id" title="var">x</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT102</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">x</span> ∈ <span class="id" title="var">y</span> -&gt; <span class="id" title="var">y</span> ∈ <span class="id" title="var">x</span> -&gt; <span class="id" title="var">False</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">cirin3f</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span> <span class="id" title="var">z</span>, <span class="id" title="var">x</span> ∈ <span class="id" title="var">y</span> -&gt; <span class="id" title="var">y</span> ∈ <span class="id" title="var">z</span> -&gt; <span class="id" title="var">z</span> ∈ <span class="id" title="var">x</span> -&gt; <span class="id" title="var">False</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT104</span> : ~ <span class="id" title="var">Ensemble</span> <span class="id" title="var">E</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT107</span> : ∀ {<span class="id" title="var">x</span>}, <span class="id" title="var">Ordinal</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">WellOrdered</span> <span class="id" title="var">E</span> <span class="id" title="var">x</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT108</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">Ordinal</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">y</span> ⊂ <span class="id" title="var">x</span> -&gt; <span class="id" title="var">y</span> &lt;&gt; <span class="id" title="var">x</span> -&gt; <span class="id" title="var">Full</span> <span class="id" title="var">y</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">y</span> ∈ <span class="id" title="var">x</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">Lemma109</span> : ∀ {<span class="id" title="var">x</span> <span class="id" title="var">y</span>}, <span class="id" title="var">Ordinal</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">Ordinal</span> <span class="id" title="var">y</span><br/>
+&nbsp;&nbsp;-&gt; ((<span class="id" title="var">x</span> ∩ <span class="id" title="var">y</span>) = <span class="id" title="var">x</span>) \/ ((<span class="id" title="var">x</span> ∩ <span class="id" title="var">y</span>) ∈ <span class="id" title="var">x</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT109</span> : ∀ {<span class="id" title="var">x</span> <span class="id" title="var">y</span>}, <span class="id" title="var">Ordinal</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">Ordinal</span> <span class="id" title="var">y</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">x</span> ⊂ <span class="id" title="var">y</span> \/ <span class="id" title="var">y</span> ⊂ <span class="id" title="var">x</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT110</span> : ∀ {<span class="id" title="var">x</span> <span class="id" title="var">y</span>}, <span class="id" title="var">Ordinal</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">Ordinal</span> <span class="id" title="var">y</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">x</span> ∈ <span class="id" title="var">y</span> \/ <span class="id" title="var">y</span> ∈ <span class="id" title="var">x</span> \/ <span class="id" title="var">x</span> = <span class="id" title="var">y</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Corollary</span> <span class="id" title="var">Th110ano</span> : ∀ {<span class="id" title="var">x</span> <span class="id" title="var">y</span>}, <span class="id" title="var">Ordinal</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">Ordinal</span> <span class="id" title="var">y</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">x</span> ∈ <span class="id" title="var">y</span> \/ <span class="id" title="var">y</span> ⊂ <span class="id" title="var">x</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT111</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">Ordinal</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">y</span> ∈ <span class="id" title="var">x</span> -&gt; <span class="id" title="var">Ordinal</span> <span class="id" title="var">y</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">Lemma113</span> :∀ <span class="id" title="var">u</span> <span class="id" title="var">v</span>, <span class="id" title="var">Ensemble</span> <span class="id" title="var">u</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">v</span> -&gt; <span class="id" title="var">Ordinal</span> <span class="id" title="var">u</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">Ordinal</span> <span class="id" title="var">v</span> -&gt; (<span class="id" title="var">Rrelation</span> <span class="id" title="var">u</span> <span class="id" title="var">E</span> <span class="id" title="var">v</span> \/ <span class="id" title="var">Rrelation</span> <span class="id" title="var">v</span> <span class="id" title="var">E</span> <span class="id" title="var">u</span> \/ <span class="id" title="var">u</span> = <span class="id" title="var">v</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT113a</span> : <span class="id" title="var">Ordinal</span> <span class="id" title="var">R</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT113b</span> : ~ <span class="id" title="var">Ensemble</span> <span class="id" title="var">R</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Global Hint Resolve</span> <span class="id" title="var">MKT113a</span> <span class="id" title="var">MKT113b</span> : <span class="id" title="var">core</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT114</span> : ∀ <span class="id" title="var">x</span>, <span class="id" title="var">rSection</span> <span class="id" title="var">x</span> <span class="id" title="var">E</span> <span class="id" title="var">R</span> -&gt; <span class="id" title="var">Ordinal</span> <span class="id" title="var">x</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Corollary</span> <span class="id" title="var">Property114</span> : ∀ <span class="id" title="var">x</span>, <span class="id" title="var">Ordinal</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">rSection</span> <span class="id" title="var">x</span> <span class="id" title="var">E</span> <span class="id" title="var">R</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT118</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">Ordinal</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">Ordinal</span> <span class="id" title="var">y</span><br/>
+&nbsp;&nbsp;-&gt; (<span class="id" title="var">x</span> ⊂ <span class="id" title="var">y</span> &lt;-&gt; <span class="id" title="var">x</span> ≼ <span class="id" title="var">y</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT119</span> : ∀ <span class="id" title="var">x</span>, <span class="id" title="var">Ordinal</span> <span class="id" title="var">x</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">x</span> = \{ <span class="id" title="var">λ</span> <span class="id" title="var">y</span>, (<span class="id" title="var">y</span> ∈ <span class="id" title="var">R</span> /\ <span class="id" title="var">Less</span> <span class="id" title="var">y</span> <span class="id" title="var">x</span>) \}.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT120</span> : ∀ <span class="id" title="var">x</span>, <span class="id" title="var">x</span> ⊂ <span class="id" title="var">R</span> -&gt; <span class="id" title="var">Ordinal</span> (∪<span class="id" title="var">x</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">Lemma121</span> : ∀ <span class="id" title="var">x</span>, <span class="id" title="var">x</span> ⊂ <span class="id" title="var">R</span> -&gt; <span class="id" title="var">x</span> &lt;&gt; <span class="id" title="var">Φ</span> -&gt; <span class="id" title="var">FirstMember</span> (∩<span class="id" title="var">x</span>) <span class="id" title="var">E</span> <span class="id" title="var">x</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT121</span> : ∀ <span class="id" title="var">x</span>, <span class="id" title="var">x</span> ⊂ <span class="id" title="var">R</span> -&gt; <span class="id" title="var">x</span> &lt;&gt; <span class="id" title="var">Φ</span> -&gt; (∩<span class="id" title="var">x</span>) ∈ <span class="id" title="var">x</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">Lem123</span> : ∀ <span class="id" title="var">x</span>, <span class="id" title="var">x</span> ∈ <span class="id" title="var">R</span> -&gt; (<span class="id" title="var">PlusOne</span> <span class="id" title="var">x</span>) ∈ <span class="id" title="var">R</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Global Hint Resolve</span> <span class="id" title="var">Lem123</span> : <span class="id" title="var">core</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT123</span> : ∀ <span class="id" title="var">x</span>, <span class="id" title="var">x</span> ∈ <span class="id" title="var">R</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">FirstMember</span> (<span class="id" title="var">PlusOne</span> <span class="id" title="var">x</span>) <span class="id" title="var">E</span> (\{ <span class="id" title="var">λ</span> <span class="id" title="var">y</span>, (<span class="id" title="var">y</span> ∈ <span class="id" title="var">R</span> /\ <span class="id" title="var">Less</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span>) \}).<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT124</span> : ∀ <span class="id" title="var">x</span>, <span class="id" title="var">x</span> ∈ <span class="id" title="var">R</span> -&gt; ∪(<span class="id" title="var">PlusOne</span> <span class="id" title="var">x</span>) = <span class="id" title="var">x</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT126a</span> : ∀ <span class="id" title="var">f</span> <span class="id" title="var">x</span>, <span class="id" title="keyword">Function</span> <span class="id" title="var">f</span> -&gt; <span class="id" title="keyword">Function</span> (<span class="id" title="var">f</span>|(<span class="id" title="var">x</span>)).<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT126b</span> : ∀ <span class="id" title="var">f</span> <span class="id" title="var">x</span>, <span class="id" title="keyword">Function</span> <span class="id" title="var">f</span> -&gt; <span class="id" title="var">dom</span>(<span class="id" title="var">f</span>|(<span class="id" title="var">x</span>)) = <span class="id" title="var">x</span> ∩ <span class="id" title="var">dom</span>(<span class="id" title="var">f</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT126c</span> : ∀ <span class="id" title="var">f</span> <span class="id" title="var">x</span>, <span class="id" title="keyword">Function</span> <span class="id" title="var">f</span><br/>
+&nbsp;&nbsp;-&gt; (∀ <span class="id" title="var">y</span>, <span class="id" title="var">y</span> ∈ <span class="id" title="var">dom</span>(<span class="id" title="var">f</span>|(<span class="id" title="var">x</span>)) -&gt; (<span class="id" title="var">f</span>|(<span class="id" title="var">x</span>))[<span class="id" title="var">y</span>] = <span class="id" title="var">f</span>[<span class="id" title="var">y</span>]).<br/>
+
+<br/>
+<span class="id" title="keyword">Corollary</span> <span class="id" title="var">frebig</span> : ∀ <span class="id" title="var">f</span> <span class="id" title="var">x</span>, <span class="id" title="keyword">Function</span> <span class="id" title="var">f</span> -&gt; <span class="id" title="var">dom</span>(<span class="id" title="var">f</span>) ⊂ <span class="id" title="var">x</span> -&gt; <span class="id" title="var">f</span>|(<span class="id" title="var">x</span>) = <span class="id" title="var">f</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Corollary</span> <span class="id" title="var">fresub</span> : ∀ <span class="id" title="var">f</span> <span class="id" title="var">h</span>, <span class="id" title="keyword">Function</span> <span class="id" title="var">f</span> -&gt; <span class="id" title="keyword">Function</span> <span class="id" title="var">h</span> -&gt; <span class="id" title="var">h</span> ⊂ <span class="id" title="var">f</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">f</span>|(<span class="id" title="var">dom</span>(<span class="id" title="var">h</span>)) = <span class="id" title="var">h</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Corollary</span> <span class="id" title="var">fuprv</span> : ∀ <span class="id" title="var">f</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span> <span class="id" title="var">z</span>, <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">y</span><br/>
+&nbsp;&nbsp;-&gt; ~ <span class="id" title="var">x</span> ∈ <span class="id" title="var">z</span> -&gt;  (<span class="id" title="var">f</span> ∪ [[<span class="id" title="var">x</span>,<span class="id" title="var">y</span>]])|(<span class="id" title="var">z</span>) = <span class="id" title="var">f</span>|(<span class="id" title="var">z</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT127</span> : ∀ {<span class="id" title="var">f</span> <span class="id" title="var">h</span> <span class="id" title="var">g</span>}, <span class="id" title="keyword">Function</span> <span class="id" title="var">f</span> -&gt; <span class="id" title="var">Ordinal</span> <span class="id" title="var">dom</span>(<span class="id" title="var">f</span>)<br/>
+&nbsp;&nbsp;-&gt; (∀ <span class="id" title="var">u</span>, <span class="id" title="var">u</span> ∈ <span class="id" title="var">dom</span>(<span class="id" title="var">f</span>) -&gt; <span class="id" title="var">f</span>[<span class="id" title="var">u</span>] = <span class="id" title="var">g</span>[<span class="id" title="var">f</span>|(<span class="id" title="var">u</span>)]) -&gt; <span class="id" title="keyword">Function</span> <span class="id" title="var">h</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">Ordinal</span> <span class="id" title="var">dom</span>(<span class="id" title="var">h</span>) -&gt; (∀ <span class="id" title="var">u</span>, <span class="id" title="var">u</span> ∈ <span class="id" title="var">dom</span>(<span class="id" title="var">h</span>) -&gt; <span class="id" title="var">h</span>[<span class="id" title="var">u</span>] = <span class="id" title="var">g</span>[<span class="id" title="var">h</span>|(<span class="id" title="var">u</span>)])<br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">h</span> ⊂ <span class="id" title="var">f</span> \/ <span class="id" title="var">f</span> ⊂ <span class="id" title="var">h</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT128a</span> :  ∀ <span class="id" title="var">g</span>, ∃ <span class="id" title="var">f</span>, <span class="id" title="keyword">Function</span> <span class="id" title="var">f</span> /\ <span class="id" title="var">Ordinal</span> <span class="id" title="var">dom</span>(<span class="id" title="var">f</span>)<br/>
+&nbsp;&nbsp;/\ (∀ <span class="id" title="var">x</span>, <span class="id" title="var">Ordinal_Number</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">f</span>[<span class="id" title="var">x</span>] = <span class="id" title="var">g</span>[<span class="id" title="var">f</span>|(<span class="id" title="var">x</span>)]).<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">lem128</span> : ∀ {<span class="id" title="var">f</span> <span class="id" title="var">g</span> <span class="id" title="var">h</span>}, <span class="id" title="keyword">Function</span> <span class="id" title="var">f</span> -&gt; <span class="id" title="keyword">Function</span> <span class="id" title="var">h</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">Ordinal</span> <span class="id" title="var">dom</span>(<span class="id" title="var">f</span>) -&gt; <span class="id" title="var">Ordinal</span> <span class="id" title="var">dom</span>(<span class="id" title="var">h</span>)<br/>
+&nbsp;&nbsp;-&gt; (∀ <span class="id" title="var">x</span>, <span class="id" title="var">Ordinal_Number</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">f</span>[<span class="id" title="var">x</span>] = <span class="id" title="var">g</span> [<span class="id" title="var">f</span>|(<span class="id" title="var">x</span>)])<br/>
+&nbsp;&nbsp;-&gt; (∀ <span class="id" title="var">x</span>, <span class="id" title="var">Ordinal_Number</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">h</span>[<span class="id" title="var">x</span>] = <span class="id" title="var">g</span> [<span class="id" title="var">h</span>|(<span class="id" title="var">x</span>)])<br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">h</span> ⊂ <span class="id" title="var">f</span> -&gt; <span class="id" title="var">h</span> = <span class="id" title="var">f</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT128b</span> :  ∀ <span class="id" title="var">g</span>, ∀ <span class="id" title="var">f</span>, <span class="id" title="keyword">Function</span> <span class="id" title="var">f</span> /\ <span class="id" title="var">Ordinal</span> <span class="id" title="var">dom</span>(<span class="id" title="var">f</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;/\ (∀ <span class="id" title="var">x</span>, <span class="id" title="var">Ordinal_Number</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">f</span>[<span class="id" title="var">x</span>] = <span class="id" title="var">g</span>[<span class="id" title="var">f</span>|(<span class="id" title="var">x</span>)])<br/>
+&nbsp;&nbsp;-&gt; ∀ <span class="id" title="var">h</span>, <span class="id" title="keyword">Function</span> <span class="id" title="var">h</span> /\ <span class="id" title="var">Ordinal</span> <span class="id" title="var">dom</span>(<span class="id" title="var">h</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;/\ (∀ <span class="id" title="var">x</span>, <span class="id" title="var">Ordinal_Number</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">h</span>[<span class="id" title="var">x</span>] = <span class="id" title="var">g</span>[<span class="id" title="var">h</span>|(<span class="id" title="var">x</span>)]) -&gt; <span class="id" title="var">f</span> = <span class="id" title="var">h</span>.<br/>
+
+<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">EnEm</span> : <span class="id" title="var">Ensemble</span> <span class="id" title="var">Φ</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Global Hint Resolve</span> <span class="id" title="var">EnEm</span> : <span class="id" title="var">core</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">powEm</span> : <span class="id" title="var">pow</span>(<span class="id" title="var">Φ</span>) = [<span class="id" title="var">Φ</span>].<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT132</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">Integer</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">y</span> ∈ <span class="id" title="var">x</span> -&gt; <span class="id" title="var">Integer</span> <span class="id" title="var">y</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT133</span> : ∀ {<span class="id" title="var">x</span> <span class="id" title="var">y</span>}, <span class="id" title="var">y</span> ∈ <span class="id" title="var">R</span> -&gt; <span class="id" title="var">LastMember</span> <span class="id" title="var">x</span> <span class="id" title="var">E</span> <span class="id" title="var">y</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">y</span> = <span class="id" title="var">PlusOne</span> <span class="id" title="var">x</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT134</span> : ∀ {<span class="id" title="var">x</span>}, <span class="id" title="var">x</span> ∈ ω -&gt; (<span class="id" title="var">PlusOne</span> <span class="id" title="var">x</span>) ∈ ω.<br/>
+
+<br/>
+<span class="id" title="keyword">Global Hint Resolve</span> <span class="id" title="var">MKT134</span> : <span class="id" title="var">core</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT135</span> : <span class="id" title="var">Φ</span> ∈ ω /\ (∀ <span class="id" title="var">x</span>, <span class="id" title="var">x</span> ∈ ω -&gt; <span class="id" title="var">Φ</span> ≠ <span class="id" title="var">PlusOne</span> <span class="id" title="var">x</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT135a</span> : <span class="id" title="var">Φ</span> ∈ ω.<br/>
+
+<br/>
+<span class="id" title="keyword">Global Hint Resolve</span> <span class="id" title="var">MKT135a</span> : <span class="id" title="var">core</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT135b</span> : ∀ <span class="id" title="var">x</span>, <span class="id" title="var">x</span> ∈ ω -&gt; <span class="id" title="var">Φ</span> ≠ <span class="id" title="var">PlusOne</span> <span class="id" title="var">x</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT136</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">x</span> ∈ ω -&gt; <span class="id" title="var">y</span> ∈ ω -&gt; <span class="id" title="var">PlusOne</span> <span class="id" title="var">x</span> = <span class="id" title="var">PlusOne</span> <span class="id" title="var">y</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">x</span> = <span class="id" title="var">y</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Corollary</span> <span class="id" title="var">Property_W</span> : <span class="id" title="var">Ordinal</span> ω.<br/>
+
+<br/>
+<span class="id" title="keyword">Global Hint Resolve</span> <span class="id" title="var">Property_W</span> : <span class="id" title="var">core</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT137</span> : ∀ <span class="id" title="var">x</span>, <span class="id" title="var">x</span> ⊂ ω -&gt; <span class="id" title="var">Φ</span> ∈ <span class="id" title="var">x</span><br/>
+&nbsp;&nbsp;-&gt; (∀ <span class="id" title="var">u</span>, <span class="id" title="var">u</span> ∈ <span class="id" title="var">x</span> -&gt; (<span class="id" title="var">PlusOne</span> <span class="id" title="var">u</span>) ∈ <span class="id" title="var">x</span>) -&gt; <span class="id" title="var">x</span> = ω.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT138</span> : ω ∈ <span class="id" title="var">R</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MiniMember_Principle</span> : ∀ <span class="id" title="var">S</span>, <span class="id" title="var">S</span> ⊂ ω -&gt; <span class="id" title="var">S</span> ≠ <span class="id" title="var">Φ</span><br/>
+&nbsp;&nbsp;-&gt; ∃ <span class="id" title="var">a</span>, <span class="id" title="var">a</span> ∈ <span class="id" title="var">S</span> /\ (∀ <span class="id" title="var">c</span>, <span class="id" title="var">c</span> ∈ <span class="id" title="var">S</span> -&gt; <span class="id" title="var">a</span> ≼ <span class="id" title="var">c</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">Mathematical_Induction</span> : ∀ (<span class="id" title="var">P</span> :<span class="id" title="keyword">Class</span> -&gt; <span class="id" title="keyword">Prop</span>), <span class="id" title="var">P</span> <span class="id" title="var">Φ</span><br/>
+&nbsp;&nbsp;-&gt; (∀ <span class="id" title="var">k</span>, <span class="id" title="var">k</span> ∈ ω -&gt; <span class="id" title="var">P</span> <span class="id" title="var">k</span> -&gt; <span class="id" title="var">P</span> (<span class="id" title="var">PlusOne</span> <span class="id" title="var">k</span>)) -&gt; (∀ <span class="id" title="var">n</span>, <span class="id" title="var">n</span> ∈ ω -&gt; <span class="id" title="var">P</span> <span class="id" title="var">n</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Ltac</span> <span class="id" title="var">MI</span> <span class="id" title="var">x</span> := <span class="id" title="tactic">apply</span> <span class="id" title="var">Mathematical_Induction</span> <span class="id" title="keyword">with</span> (<span class="id" title="var">n</span>:=<span class="id" title="var">x</span>); <span class="id" title="tactic">auto</span>; <span class="id" title="tactic">intros</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">caseint</span> : ∀ {<span class="id" title="var">x</span>}, <span class="id" title="var">x</span> ∈ ω<br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">x</span> = <span class="id" title="var">Φ</span> \/ (∃ <span class="id" title="var">v</span>, <span class="id" title="var">v</span> ∈ ω /\ <span class="id" title="var">x</span> = <span class="id" title="var">PlusOne</span> <span class="id" title="var">v</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">The_Second_Mathematical_Induction</span> : ∀ (<span class="id" title="var">P</span>: <span class="id" title="keyword">Class</span> -&gt; <span class="id" title="keyword">Prop</span>),<br/>
+&nbsp;&nbsp;<span class="id" title="var">P</span> <span class="id" title="var">Φ</span> -&gt; (∀ <span class="id" title="var">k</span>, <span class="id" title="var">k</span> ∈ ω -&gt; (∀ <span class="id" title="var">m</span>, <span class="id" title="var">m</span> ≺ <span class="id" title="var">k</span> -&gt; <span class="id" title="var">P</span> <span class="id" title="var">m</span>) -&gt; <span class="id" title="var">P</span> <span class="id" title="var">k</span>)<br/>
+&nbsp;&nbsp;-&gt; (∀ <span class="id" title="var">n</span>, <span class="id" title="var">n</span> ∈ ω -&gt; <span class="id" title="var">P</span> <span class="id" title="var">n</span>).<br/>
+
+<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">f2Pf</span> : ∀ {<span class="id" title="var">f</span>} <span class="id" title="var">P</span>, <span class="id" title="keyword">let</span> <span class="id" title="var">g</span> := \{\ <span class="id" title="var">λ</span> <span class="id" title="var">u</span> <span class="id" title="var">v</span>, <span class="id" title="var">v</span> = <span class="id" title="var">f</span>[<span class="id" title="var">P</span> <span class="id" title="var">u</span>] \}\ <span class="id" title="tactic">in</span><br/>
+&nbsp;&nbsp;<span class="id" title="keyword">Function</span> <span class="id" title="var">f</span> -&gt; (∀ <span class="id" title="var">h</span>, <span class="id" title="var">Ensemble</span> <span class="id" title="var">h</span> -&gt; <span class="id" title="var">g</span>[<span class="id" title="var">h</span>] = <span class="id" title="var">f</span>[<span class="id" title="var">P</span> <span class="id" title="var">h</span>]).<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">c2fp</span> : ∀ {<span class="id" title="var">x</span> <span class="id" title="var">c</span> <span class="id" title="var">g</span> <span class="id" title="var">P</span> <span class="id" title="var">f</span>}, <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">dom</span>(<span class="id" title="var">c</span>) = <span class="id" title="var">μ</span> ~ [<span class="id" title="var">Φ</span>]<br/>
+&nbsp;&nbsp;-&gt; (∀ <span class="id" title="var">x</span>, <span class="id" title="var">x</span> ∈ <span class="id" title="var">dom</span>(<span class="id" title="var">c</span>) -&gt; <span class="id" title="var">c</span>[<span class="id" title="var">x</span>] ∈ <span class="id" title="var">x</span>)<br/>
+&nbsp;&nbsp;-&gt; (∀ <span class="id" title="var">h</span>, <span class="id" title="var">Ensemble</span> <span class="id" title="var">h</span> -&gt; <span class="id" title="var">g</span>[<span class="id" title="var">h</span>] = <span class="id" title="var">c</span>[<span class="id" title="var">P</span> <span class="id" title="var">h</span>])<br/>
+&nbsp;&nbsp;-&gt; (∀ <span class="id" title="var">x</span>, <span class="id" title="var">Ordinal_Number</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">f</span>[<span class="id" title="var">x</span>] = <span class="id" title="var">g</span>[<span class="id" title="var">f</span>|(<span class="id" title="var">x</span>)])<br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="keyword">Function</span> <span class="id" title="var">f</span> -&gt; <span class="id" title="var">Ordinal</span> <span class="id" title="var">dom</span>(<span class="id" title="var">f</span>)<br/>
+&nbsp;&nbsp;-&gt; (∀ <span class="id" title="var">u</span>, <span class="id" title="var">u</span> ∈ <span class="id" title="var">dom</span>(<span class="id" title="var">f</span>) -&gt; <span class="id" title="var">Ensemble</span> (<span class="id" title="var">P</span> (<span class="id" title="var">f</span>|(<span class="id" title="var">u</span>)))<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;-&gt; <span class="id" title="var">f</span>[<span class="id" title="var">u</span>] ∈ (<span class="id" title="var">P</span> (<span class="id" title="var">f</span>|(<span class="id" title="var">u</span>)))).<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT140</span> : ∀ <span class="id" title="var">x</span>, <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span><br/>
+&nbsp;&nbsp;-&gt; ∃ <span class="id" title="var">f</span>, <span class="id" title="var">Function1_1</span> <span class="id" title="var">f</span> /\ <span class="id" title="var">ran</span>(<span class="id" title="var">f</span>) = <span class="id" title="var">x</span> /\ <span class="id" title="var">Ordinal_Number</span> <span class="id" title="var">dom</span>(<span class="id" title="var">f</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT142</span> : ∀ <span class="id" title="var">n</span>, <span class="id" title="var">Nest</span> <span class="id" title="var">n</span> -&gt; (∀ <span class="id" title="var">m</span>, <span class="id" title="var">m</span> ∈ <span class="id" title="var">n</span> -&gt; <span class="id" title="var">Nest</span> <span class="id" title="var">m</span>)<br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">Nest</span> (∪<span class="id" title="var">n</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT143</span> : ∀ <span class="id" title="var">x</span>, <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> -&gt; ∃ <span class="id" title="var">n</span>, (<span class="id" title="var">Nest</span> <span class="id" title="var">n</span> /\ <span class="id" title="var">n</span> ⊂ <span class="id" title="var">x</span>)<br/>
+&nbsp;&nbsp;/\ (∀ <span class="id" title="var">m</span>, <span class="id" title="var">Nest</span> <span class="id" title="var">m</span> -&gt; <span class="id" title="var">m</span> ⊂ <span class="id" title="var">x</span> -&gt; <span class="id" title="var">n</span> ⊂ <span class="id" title="var">m</span> -&gt; <span class="id" title="var">m</span> = <span class="id" title="var">n</span>).<br/>
+
+<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">eqvp</span> : ∀ {<span class="id" title="var">x</span> <span class="id" title="var">y</span>}, <span class="id" title="var">Ensemble</span> <span class="id" title="var">y</span> -&gt; <span class="id" title="var">x</span> ≈ <span class="id" title="var">y</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT145</span> : ∀ <span class="id" title="var">x</span>, <span class="id" title="var">x</span> ≈ <span class="id" title="var">x</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Global Hint Resolve</span> <span class="id" title="var">MKT145</span> : <span class="id" title="var">core</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT146</span> : ∀ {<span class="id" title="var">x</span> <span class="id" title="var">y</span>}, <span class="id" title="var">x</span> ≈ <span class="id" title="var">y</span> -&gt; <span class="id" title="var">y</span> ≈ <span class="id" title="var">x</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT147</span> : ∀ <span class="id" title="var">y</span> <span class="id" title="var">x</span> <span class="id" title="var">z</span>, <span class="id" title="var">x</span> ≈ <span class="id" title="var">y</span> -&gt; <span class="id" title="var">y</span> ≈ <span class="id" title="var">z</span> -&gt; <span class="id" title="var">x</span> ≈ <span class="id" title="var">z</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT150</span> : <span class="id" title="var">WellOrdered</span> <span class="id" title="var">E</span> <span class="id" title="var">C</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT152a</span> : <span class="id" title="keyword">Function</span> <span class="id" title="var">P</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Global Hint Resolve</span> <span class="id" title="var">MKT152a</span> : <span class="id" title="var">core</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT152b</span> : <span class="id" title="var">dom</span>(<span class="id" title="var">P</span>) = <span class="id" title="var">μ</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT152c</span> : <span class="id" title="var">ran</span>(<span class="id" title="var">P</span>) = <span class="id" title="var">C</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Corollary</span> <span class="id" title="var">Property_PClass</span> : ∀ {<span class="id" title="var">x</span>}, <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">P</span> [<span class="id" title="var">x</span>] ∈ <span class="id" title="var">C</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Global Hint Resolve</span> <span class="id" title="var">Property_PClass</span> : <span class="id" title="var">core</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT153</span> : ∀ {<span class="id" title="var">x</span>}, <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">P</span>[<span class="id" title="var">x</span>] ≈ <span class="id" title="var">x</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Global Hint Resolve</span> <span class="id" title="var">MKT153</span> : <span class="id" title="var">core</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">pveqv</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">Ensemble</span> <span class="id" title="var">y</span> -&gt; <span class="id" title="var">P</span>[<span class="id" title="var">x</span>] = <span class="id" title="var">y</span> -&gt; <span class="id" title="var">x</span> ≈ <span class="id" title="var">y</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">carE</span> : ∀ {<span class="id" title="var">x</span>}, <span class="id" title="var">P</span>[<span class="id" title="var">x</span>] = <span class="id" title="var">Φ</span> -&gt; <span class="id" title="var">x</span> = <span class="id" title="var">Φ</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT154</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">y</span><br/>
+&nbsp;&nbsp;-&gt; (<span class="id" title="var">P</span>[<span class="id" title="var">x</span>] = <span class="id" title="var">P</span>[<span class="id" title="var">y</span>] &lt;-&gt; <span class="id" title="var">x</span> ≈ <span class="id" title="var">y</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT155</span> : ∀ <span class="id" title="var">x</span>, <span class="id" title="var">P</span>[<span class="id" title="var">P</span>[<span class="id" title="var">x</span>]] = <span class="id" title="var">P</span>[<span class="id" title="var">x</span>].<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT156</span> : ∀ <span class="id" title="var">x</span>, (<span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> /\ <span class="id" title="var">P</span>[<span class="id" title="var">x</span>] = <span class="id" title="var">x</span>) &lt;-&gt; <span class="id" title="var">x</span>∈<span class="id" title="var">C</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT157</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">y</span> ∈ <span class="id" title="var">R</span> -&gt; <span class="id" title="var">x</span> ⊂ <span class="id" title="var">y</span> -&gt; <span class="id" title="var">P</span>[<span class="id" title="var">x</span>] ≼ <span class="id" title="var">y</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT158</span> : ∀ {<span class="id" title="var">x</span> <span class="id" title="var">y</span>}, <span class="id" title="var">x</span> ⊂ <span class="id" title="var">y</span> -&gt; <span class="id" title="var">P</span>[<span class="id" title="var">x</span>] ≼ <span class="id" title="var">P</span>[<span class="id" title="var">y</span>].<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT159</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span> <span class="id" title="var">u</span> <span class="id" title="var">v</span>, <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">y</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">u</span> ⊂ <span class="id" title="var">x</span> -&gt; <span class="id" title="var">v</span> ⊂ <span class="id" title="var">y</span> -&gt; <span class="id" title="var">x</span> ≈ <span class="id" title="var">v</span> -&gt; <span class="id" title="var">y</span> ≈ <span class="id" title="var">u</span> -&gt; <span class="id" title="var">x</span> ≈ <span class="id" title="var">y</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT160</span> : ∀ {<span class="id" title="var">f</span>}, <span class="id" title="keyword">Function</span> <span class="id" title="var">f</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">f</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">P</span>[<span class="id" title="var">ran</span>(<span class="id" title="var">f</span>)] ≼ <span class="id" title="var">P</span>[<span class="id" title="var">dom</span>(<span class="id" title="var">f</span>)].<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT161</span> : ∀ {<span class="id" title="var">x</span>}, <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">P</span>[<span class="id" title="var">x</span>] ≺ <span class="id" title="var">P</span>[<span class="id" title="var">pow</span>(<span class="id" title="var">x</span>)].<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT162</span> : ~ <span class="id" title="var">Ensemble</span> <span class="id" title="var">C</span>.<br/>
+
+<br/>
+
+<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">Lemma163a</span> : ∀ {<span class="id" title="var">x</span> <span class="id" title="var">y</span>}, <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> -&gt; ~ <span class="id" title="var">x</span> ∈ <span class="id" title="var">y</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">y</span> = (<span class="id" title="var">y</span> ∪ [<span class="id" title="var">x</span>]) ~ [<span class="id" title="var">x</span>].<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">Lemma163b</span> : ∀ {<span class="id" title="var">x</span> <span class="id" title="var">y</span>}, <span class="id" title="var">x</span> ∈ <span class="id" title="var">y</span> -&gt; <span class="id" title="var">y</span> = (<span class="id" title="var">y</span> ~ [<span class="id" title="var">x</span>]) ∪ [<span class="id" title="var">x</span>].<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">Lemma163c</span> : ∀ {<span class="id" title="var">x</span> <span class="id" title="var">y</span> <span class="id" title="var">z</span>}, <span class="id" title="var">x</span> ~ <span class="id" title="var">y</span> ~ <span class="id" title="var">z</span> = <span class="id" title="var">x</span> ~ <span class="id" title="var">z</span> ~ <span class="id" title="var">y</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT163</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">x</span>∈ω -&gt; <span class="id" title="var">y</span>∈ω -&gt; (<span class="id" title="var">PlusOne</span> <span class="id" title="var">x</span>) ≈ (<span class="id" title="var">PlusOne</span> <span class="id" title="var">y</span>)<br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">x</span> ≈ <span class="id" title="var">y</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT164</span> : ω ⊂ <span class="id" title="var">C</span>.<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT165</span> : ω ∈ <span class="id" title="var">C</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Corollary</span> <span class="id" title="var">Property_Finite</span> : ∀ {<span class="id" title="var">x</span>}, <span class="id" title="var">Finite</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">finsub</span> : ∀ {<span class="id" title="var">A</span> <span class="id" title="var">B</span>}, <span class="id" title="var">Finite</span> <span class="id" title="var">A</span> -&gt; <span class="id" title="var">B</span> ⊂ <span class="id" title="var">A</span> -&gt; <span class="id" title="var">Finite</span> <span class="id" title="var">B</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">finsin</span> : ∀ <span class="id" title="var">z</span>, <span class="id" title="var">Ensemble</span> <span class="id" title="var">z</span> -&gt; <span class="id" title="var">Finite</span> ([<span class="id" title="var">z</span>]).<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">finue</span> : ∀ {<span class="id" title="var">x</span> <span class="id" title="var">z</span>}, <span class="id" title="var">Finite</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">z</span> -&gt; ~ <span class="id" title="var">z</span> ∈ <span class="id" title="var">x</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">P</span>[<span class="id" title="var">x</span> ∪ [<span class="id" title="var">z</span>]] = <span class="id" title="var">PlusOne</span> <span class="id" title="var">P</span>[<span class="id" title="var">x</span>].<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">finse</span> : ∀ <span class="id" title="var">f</span> {<span class="id" title="var">y</span> <span class="id" title="var">u</span> <span class="id" title="var">z</span>}, <span class="id" title="var">P</span>[<span class="id" title="var">y</span>] = <span class="id" title="var">PlusOne</span> <span class="id" title="var">u</span> -&gt; <span class="id" title="var">u</span> ∈ ω -&gt; <span class="id" title="keyword">Function</span> <span class="id" title="var">f</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="keyword">Function</span> <span class="id" title="var">f⁻¹</span> -&gt; <span class="id" title="var">dom</span>(<span class="id" title="var">f</span>) = <span class="id" title="var">y</span> -&gt; <span class="id" title="var">ran</span>(<span class="id" title="var">f</span>) = <span class="id" title="var">PlusOne</span> <span class="id" title="var">u</span> -&gt; <span class="id" title="var">z</span> ∈ <span class="id" title="var">y</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">P</span>[<span class="id" title="var">y</span> ~ [<span class="id" title="var">z</span>]] = <span class="id" title="var">u</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">lem167a</span> : ∀ <span class="id" title="var">r</span> <span class="id" title="var">x</span> <span class="id" title="var">f</span>, <span class="id" title="var">WellOrdered</span> <span class="id" title="var">r</span> <span class="id" title="var">P</span>[<span class="id" title="var">x</span>] -&gt; <span class="id" title="var">Function1_1</span> <span class="id" title="var">f</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">dom</span>(<span class="id" title="var">f</span>) = <span class="id" title="var">x</span> -&gt; <span class="id" title="var">ran</span>(<span class="id" title="var">f</span>) = <span class="id" title="var">P</span>[<span class="id" title="var">x</span>]<br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">WellOrdered</span> \{\ <span class="id" title="var">λ</span> <span class="id" title="var">u</span> <span class="id" title="var">v</span>, <span class="id" title="var">Rrelation</span> <span class="id" title="var">f</span>[<span class="id" title="var">u</span>] <span class="id" title="var">r</span> <span class="id" title="var">f</span>[<span class="id" title="var">v</span>] \}\ <span class="id" title="var">x</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">lem167b</span> : ∀ {<span class="id" title="var">f</span> <span class="id" title="var">r</span>}, ω ⊂ <span class="id" title="var">ran</span>(<span class="id" title="var">f</span>) -&gt; <span class="id" title="var">WellOrdered</span> <span class="id" title="var">r⁻¹</span> <span class="id" title="var">dom</span>(<span class="id" title="var">f</span>)<br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">Order_Pr</span> <span class="id" title="var">f</span> <span class="id" title="var">r</span> <span class="id" title="var">E</span> -&gt; <span class="id" title="var">False</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT167</span> : ∀ <span class="id" title="var">x</span>, <span class="id" title="var">Finite</span> <span class="id" title="var">x</span> &lt;-&gt; ∃ <span class="id" title="var">r</span>, <span class="id" title="var">WellOrdered</span> <span class="id" title="var">r</span> <span class="id" title="var">x</span><br/>
+&nbsp;&nbsp;/\ <span class="id" title="var">WellOrdered</span> (<span class="id" title="var">r⁻¹</span>) <span class="id" title="var">x</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">lem168</span> : ∀ {<span class="id" title="var">x</span> <span class="id" title="var">y</span> <span class="id" title="var">r</span> <span class="id" title="var">s</span>}, <span class="id" title="var">WellOrdered</span> <span class="id" title="var">r</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">WellOrdered</span> <span class="id" title="var">s</span> <span class="id" title="var">y</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">WellOrdered</span> \{\ <span class="id" title="var">λ</span> <span class="id" title="var">u</span> <span class="id" title="var">v</span>, (<span class="id" title="var">u</span> ∈ <span class="id" title="var">x</span> /\ <span class="id" title="var">v</span> ∈ <span class="id" title="var">x</span> /\ <span class="id" title="var">Rrelation</span> <span class="id" title="var">u</span> <span class="id" title="var">r</span> <span class="id" title="var">v</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;\/ (<span class="id" title="var">u</span> ∈ (<span class="id" title="var">y</span> ~ <span class="id" title="var">x</span>) /\ <span class="id" title="var">v</span> ∈ (<span class="id" title="var">y</span> ~ <span class="id" title="var">x</span>) /\ <span class="id" title="var">Rrelation</span> <span class="id" title="var">u</span> <span class="id" title="var">s</span> <span class="id" title="var">v</span>)<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;\/ (<span class="id" title="var">u</span> ∈ <span class="id" title="var">x</span> /\ <span class="id" title="var">v</span> ∈ (<span class="id" title="var">y</span> ~ <span class="id" title="var">x</span>)) \}\ (<span class="id" title="var">x</span> ∪ <span class="id" title="var">y</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT168</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">Finite</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">Finite</span> <span class="id" title="var">y</span> -&gt; <span class="id" title="var">Finite</span> (<span class="id" title="var">x</span> ∪ <span class="id" title="var">y</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">Lemma169</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span>, ∪(<span class="id" title="var">x</span> ∪ <span class="id" title="var">y</span>) = (∪<span class="id" title="var">x</span>) ∪ (∪<span class="id" title="var">y</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT169</span> : ∀ <span class="id" title="var">x</span>, <span class="id" title="var">Finite</span> <span class="id" title="var">x</span> -&gt; (∀ <span class="id" title="var">z</span>, <span class="id" title="var">z</span> ∈ <span class="id" title="var">x</span> -&gt; <span class="id" title="var">Finite</span> <span class="id" title="var">z</span>)<br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">Finite</span> (∪ <span class="id" title="var">x</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT170</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">Finite</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">Finite</span> <span class="id" title="var">y</span> -&gt; <span class="id" title="var">Finite</span> (<span class="id" title="var">x</span> × <span class="id" title="var">y</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">lem171</span> : ∀ {<span class="id" title="var">x</span> <span class="id" title="var">y</span>}, <span class="id" title="var">y</span> ∈ <span class="id" title="var">x</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">pow</span>(<span class="id" title="var">x</span>) = <span class="id" title="var">pow</span>(<span class="id" title="var">x</span> ~ [<span class="id" title="var">y</span>]) ∪ \{ <span class="id" title="var">λ</span> <span class="id" title="var">z</span>, <span class="id" title="var">z</span> ⊂ <span class="id" title="var">x</span> /\ <span class="id" title="var">y</span> ∈ <span class="id" title="var">z</span> \}.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT171</span> : ∀ <span class="id" title="var">x</span>, <span class="id" title="var">Finite</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">Finite</span> <span class="id" title="var">pow</span>(<span class="id" title="var">x</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT172</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">Finite</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">y</span> ⊂ <span class="id" title="var">x</span> -&gt; <span class="id" title="var">P</span>[<span class="id" title="var">y</span>] = <span class="id" title="var">P</span>[<span class="id" title="var">x</span>] -&gt; <span class="id" title="var">x</span> = <span class="id" title="var">y</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT173</span> : ∀ <span class="id" title="var">x</span>, <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> -&gt; ~ <span class="id" title="var">Finite</span> <span class="id" title="var">x</span><br/>
+&nbsp;&nbsp;-&gt; ∃ <span class="id" title="var">y</span>, <span class="id" title="var">y</span> ⊂ <span class="id" title="var">x</span> /\ <span class="id" title="var">y</span> &lt;&gt; <span class="id" title="var">x</span> /\ <span class="id" title="var">x</span> ≈ <span class="id" title="var">y</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT174</span> : ∀ <span class="id" title="var">x</span>, <span class="id" title="var">x</span> ∈ (<span class="id" title="var">R</span> ~ ω) -&gt; <span class="id" title="var">P</span>[<span class="id" title="var">PlusOne</span> <span class="id" title="var">x</span>] = <span class="id" title="var">P</span>[<span class="id" title="var">x</span>].<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">lem177a</span> : ∀ {<span class="id" title="var">a</span> <span class="id" title="var">b</span>}, <span class="id" title="var">a</span> ∈ <span class="id" title="var">R</span> -&gt; <span class="id" title="var">b</span> ∈ <span class="id" title="var">R</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">Max</span> <span class="id" title="var">a</span> <span class="id" title="var">b</span> = <span class="id" title="var">a</span> \/ <span class="id" title="var">Max</span> <span class="id" title="var">a</span> <span class="id" title="var">b</span> = <span class="id" title="var">b</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">lem177b</span> : ∀ {<span class="id" title="var">a</span> <span class="id" title="var">b</span>}, <span class="id" title="var">a</span> ∈ <span class="id" title="var">R</span> -&gt; <span class="id" title="var">b</span> ∈ <span class="id" title="var">R</span> -&gt; <span class="id" title="var">Max</span> <span class="id" title="var">a</span> <span class="id" title="var">b</span> ∈ <span class="id" title="var">R</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">lem177c</span> : ∀ <span class="id" title="var">P</span> <span class="id" title="var">a</span> <span class="id" title="var">b</span> <span class="id" title="var">c</span> <span class="id" title="var">d</span>, <span class="id" title="var">Ensemble</span> ([<span class="id" title="var">a</span>,<span class="id" title="var">b</span>]) -&gt; <span class="id" title="var">Ensemble</span> ([<span class="id" title="var">c</span>,<span class="id" title="var">d</span>])<br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">Rrelation</span> ([<span class="id" title="var">a</span>,<span class="id" title="var">b</span>]) \{\ <span class="id" title="var">λ</span> <span class="id" title="var">a</span> <span class="id" title="var">b</span>, ∃ <span class="id" title="var">u</span> <span class="id" title="var">v</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">a</span> = [<span class="id" title="var">u</span>,<span class="id" title="var">v</span>]<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;/\ <span class="id" title="var">b</span> = [<span class="id" title="var">x</span>,<span class="id" title="var">y</span>] /\ <span class="id" title="var">P</span> <span class="id" title="var">u</span> <span class="id" title="var">v</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span> \}\ ([<span class="id" title="var">c</span>,<span class="id" title="var">d</span>]) &lt;-&gt; <span class="id" title="var">P</span> <span class="id" title="var">a</span> <span class="id" title="var">b</span> <span class="id" title="var">c</span> <span class="id" title="var">d</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT177</span> : <span class="id" title="var">WellOrdered</span> ≪ (<span class="id" title="var">R</span> × <span class="id" title="var">R</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">lem178a</span> : ∀ {<span class="id" title="var">a</span> <span class="id" title="var">b</span>}, <span class="id" title="var">a</span> ∈ <span class="id" title="var">R</span> -&gt; <span class="id" title="var">b</span> ∈ <span class="id" title="var">R</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">a</span> ∈ (<span class="id" title="var">PlusOne</span> (<span class="id" title="var">Max</span> <span class="id" title="var">a</span> <span class="id" title="var">b</span>)).<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">lem178b</span> : ∀ <span class="id" title="var">u</span> <span class="id" title="var">v</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">u</span> ∈ <span class="id" title="var">R</span> -&gt; <span class="id" title="var">v</span> ∈ <span class="id" title="var">R</span> -&gt; <span class="id" title="var">x</span> ∈ <span class="id" title="var">R</span> -&gt; <span class="id" title="var">y</span> ∈ <span class="id" title="var">R</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">Max</span> <span class="id" title="var">u</span> <span class="id" title="var">v</span> ≺ <span class="id" title="var">Max</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span> \/ <span class="id" title="var">Max</span> <span class="id" title="var">u</span> <span class="id" title="var">v</span> = <span class="id" title="var">Max</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">PlusOne</span> (<span class="id" title="var">Max</span> <span class="id" title="var">u</span> <span class="id" title="var">v</span>) ⊂ <span class="id" title="var">PlusOne</span> (<span class="id" title="var">Max</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT178</span> : ∀ <span class="id" title="var">u</span> <span class="id" title="var">v</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">Rrelation</span> ([<span class="id" title="var">u</span>,<span class="id" title="var">v</span>]) ≪ ([<span class="id" title="var">x</span>,<span class="id" title="var">y</span>])<br/>
+&nbsp;&nbsp;-&gt; [<span class="id" title="var">u</span>,<span class="id" title="var">v</span>] ∈ ((<span class="id" title="var">PlusOne</span> (<span class="id" title="var">Max</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span>)) × (<span class="id" title="var">PlusOne</span> (<span class="id" title="var">Max</span> <span class="id" title="var">x</span> <span class="id" title="var">y</span>))).<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">le179</span> : ∀ <span class="id" title="var">x</span>, <span class="id" title="var">x</span> ∈ <span class="id" title="var">R</span> -&gt; <span class="id" title="var">P</span>[<span class="id" title="var">x</span>] ∈ ω -&gt; <span class="id" title="var">P</span>[<span class="id" title="var">x</span>] = <span class="id" title="var">x</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">t69r</span> : ∀ <span class="id" title="var">f</span> <span class="id" title="var">x</span>, <span class="id" title="keyword">Function</span> <span class="id" title="var">f</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">f</span>[<span class="id" title="var">x</span>] -&gt; <span class="id" title="var">f</span>[<span class="id" title="var">x</span>] ∈ <span class="id" title="var">ran</span>(<span class="id" title="var">f</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">CsubR</span> : <span class="id" title="var">C</span> ⊂ <span class="id" title="var">R</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Global Hint Resolve</span> <span class="id" title="var">CsubR</span> : <span class="id" title="var">core</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">plusoneEns</span> : ∀ <span class="id" title="var">z</span>, <span class="id" title="var">Ensemble</span> <span class="id" title="var">z</span> -&gt; <span class="id" title="var">Ensemble</span> (<span class="id" title="var">PlusOne</span> <span class="id" title="var">z</span>).<br/>
+ 
+<br/>
+<span class="id" title="keyword">Global Hint Resolve</span> <span class="id" title="var">plusoneEns</span> : <span class="id" title="var">core</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">pclec</span> : ∀ {<span class="id" title="var">x</span>}, <span class="id" title="var">x</span> ∈ <span class="id" title="var">R</span> -&gt; <span class="id" title="var">P</span>[<span class="id" title="var">x</span>] ≼ <span class="id" title="var">x</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">lem179a</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">y</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">P</span>[<span class="id" title="var">x</span>×<span class="id" title="var">y</span>] = <span class="id" title="var">P</span>[(<span class="id" title="var">P</span>[<span class="id" title="var">x</span>]) × (<span class="id" title="var">P</span>[<span class="id" title="var">y</span>])].<br/>
+
+<br/>
+<span class="id" title="keyword">Lemma</span> <span class="id" title="var">lem179b</span> : ∀ <span class="id" title="var">z</span> <span class="id" title="var">x</span>, <span class="id" title="var">x</span> ∈ <span class="id" title="var">C</span> -&gt; <span class="id" title="var">z</span> ∈ <span class="id" title="var">R</span> -&gt; <span class="id" title="var">P</span>[<span class="id" title="var">z</span>] ∈ <span class="id" title="var">x</span> -&gt; <span class="id" title="var">z</span> ∈ <span class="id" title="var">x</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT179</span> : ∀ {<span class="id" title="var">x</span>}, <span class="id" title="var">x</span> ∈ (<span class="id" title="var">C</span> ~ ω) -&gt; <span class="id" title="var">P</span>[<span class="id" title="var">x</span> × <span class="id" title="var">x</span>] = <span class="id" title="var">x</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">wh1</span> : ∀ {<span class="id" title="var">x</span> <span class="id" title="var">y</span>}, <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">y</span> &lt;&gt; <span class="id" title="var">Φ</span> -&gt; <span class="id" title="var">P</span>[<span class="id" title="var">y</span>] ⊂ <span class="id" title="var">P</span>[<span class="id" title="var">x</span>]<br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">P</span>[<span class="id" title="var">x</span>] ≼ <span class="id" title="var">P</span>[<span class="id" title="var">y</span>×<span class="id" title="var">x</span>].<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">wh2</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">x</span> ⊂ <span class="id" title="var">y</span> -&gt; (<span class="id" title="var">x</span> × <span class="id" title="var">y</span>) ⊂ (<span class="id" title="var">y</span> × <span class="id" title="var">y</span>).<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">wh3</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">Ensemble</span> <span class="id" title="var">x</span> -&gt; <span class="id" title="var">Ensemble</span> <span class="id" title="var">y</span> -&gt; <span class="id" title="var">P</span>[<span class="id" title="var">x</span> × <span class="id" title="var">y</span>] = <span class="id" title="var">P</span>[<span class="id" title="var">y</span> × <span class="id" title="var">x</span>].<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT180a</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">x</span> ∈ <span class="id" title="var">C</span> -&gt; <span class="id" title="var">y</span> ∈ <span class="id" title="var">C</span> -&gt; <span class="id" title="var">y</span> ∉ ω -&gt; <span class="id" title="var">x</span> ≠ <span class="id" title="var">Φ</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">P</span>[<span class="id" title="var">x</span>] ⊂ <span class="id" title="var">P</span>[<span class="id" title="var">y</span>] -&gt; <span class="id" title="var">P</span>[<span class="id" title="var">x</span> × <span class="id" title="var">y</span>] = <span class="id" title="var">Max</span> <span class="id" title="var">P</span>[<span class="id" title="var">x</span>] <span class="id" title="var">P</span>[<span class="id" title="var">y</span>].<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT180b</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">x</span> ∈ <span class="id" title="var">C</span> -&gt; <span class="id" title="var">y</span> ∈ <span class="id" title="var">C</span> -&gt; <span class="id" title="var">y</span> ∉ ω -&gt; <span class="id" title="var">x</span> ≠ <span class="id" title="var">Φ</span> -&gt; <span class="id" title="var">y</span> ≠ <span class="id" title="var">Φ</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">P</span>[<span class="id" title="var">x</span> × <span class="id" title="var">y</span>] = <span class="id" title="var">Max</span> <span class="id" title="var">P</span>[<span class="id" title="var">x</span>] <span class="id" title="var">P</span>[<span class="id" title="var">y</span>].<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT180</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">x</span> ∈ <span class="id" title="var">C</span> -&gt; <span class="id" title="var">y</span> ∈ <span class="id" title="var">C</span> -&gt; <span class="id" title="var">x</span> ∉ ω \/ <span class="id" title="var">y</span> ∉ ω -&gt; <span class="id" title="var">x</span> ≠ <span class="id" title="var">Φ</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">y</span> ≠ <span class="id" title="var">Φ</span> -&gt; <span class="id" title="var">P</span>[<span class="id" title="var">x</span> × <span class="id" title="var">y</span>] = <span class="id" title="var">Max</span> <span class="id" title="var">P</span>[<span class="id" title="var">x</span>] <span class="id" title="var">P</span>[<span class="id" title="var">y</span>].<br/>
+
+<br/>
+<span class="id" title="keyword">Fact</span> <span class="id" title="var">wh4</span> : ∀ <span class="id" title="var">x</span> <span class="id" title="var">y</span>, <span class="id" title="var">x</span> ⊂ <span class="id" title="var">y</span> -&gt; (<span class="id" title="var">y</span> ~ <span class="id" title="var">x</span>) ∪ <span class="id" title="var">x</span> = <span class="id" title="var">y</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT181a</span> : ∃ <span class="id" title="var">f</span>, <span class="id" title="var">Order_Pr</span> <span class="id" title="var">f</span> <span class="id" title="var">E</span> <span class="id" title="var">E</span> /\ <span class="id" title="var">dom</span>(<span class="id" title="var">f</span>) = <span class="id" title="var">R</span><br/>
+&nbsp;&nbsp;/\ <span class="id" title="var">ran</span>(<span class="id" title="var">f</span>) = <span class="id" title="var">C</span> ~ ω.<br/>
+
+<br/>
+<span class="id" title="keyword">Theorem</span> <span class="id" title="var">MKT181b</span> : ∀ <span class="id" title="var">f</span> <span class="id" title="var">g</span>, <span class="id" title="var">Order_Pr</span> <span class="id" title="var">f</span> <span class="id" title="var">E</span> <span class="id" title="var">E</span> -&gt; <span class="id" title="var">Order_Pr</span> <span class="id" title="var">g</span> <span class="id" title="var">E</span> <span class="id" title="var">E</span><br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">dom</span>(<span class="id" title="var">f</span>) = <span class="id" title="var">R</span> -&gt; <span class="id" title="var">dom</span>(<span class="id" title="var">g</span>) = <span class="id" title="var">R</span> -&gt; <span class="id" title="var">ran</span>(<span class="id" title="var">f</span>) = <span class="id" title="var">C</span> ~ ω<br/>
+&nbsp;&nbsp;-&gt; <span class="id" title="var">ran</span>(<span class="id" title="var">g</span>) = <span class="id" title="var">C</span> ~ ω -&gt; <span class="id" title="var">f</span> = <span class="id" title="var">g</span>.<br/>
+</div>
+<table>
+<tr>
+<td>Global Index</td>
+<td>A</td>
+<td>B</td>
+<td>C</td>
+<td>D</td>
+<td>E</td>
+<td>F</td>
+<td>G</td>
+<td>H</td>
+<td>I</td>
+<td>J</td>
+<td>K</td>
+<td>L</td>
+<td><a href="index.html#global_M">M</a></td>
+<td>N</td>
+<td>O</td>
+<td>P</td>
+<td>Q</td>
+<td>R</td>
+<td>S</td>
+<td>T</td>
+<td>U</td>
+<td>V</td>
+<td>W</td>
+<td>X</td>
+<td>Y</td>
+<td>Z</td>
+<td>_</td>
+<td>other</td>
+<td>(1 entry)</td>
+</tr>
+<tr>
+<td>Library Index</td>
+<td>A</td>
+<td>B</td>
+<td>C</td>
+<td>D</td>
+<td>E</td>
+<td>F</td>
+<td>G</td>
+<td>H</td>
+<td>I</td>
+<td>J</td>
+<td>K</td>
+<td>L</td>
+<td><a href="index.html#library_M">M</a></td>
+<td>N</td>
+<td>O</td>
+<td>P</td>
+<td>Q</td>
+<td>R</td>
+<td>S</td>
+<td>T</td>
+<td>U</td>
+<td>V</td>
+<td>W</td>
+<td>X</td>
+<td>Y</td>
+<td>Z</td>
+<td>_</td>
+<td>other</td>
+<td>(1 entry)</td>
+</tr>
+</table>
+<hr/>
+<h1>Global Index</h1>
+<a id="global_M"></a><h2>M </h2>
+<a href="mk_theorems.html">mk_theorems</a> [library]<br/>
+<br/><br/><hr/>
+<h1>Library Index</h1>
+<a id="library_M"></a><h2>M </h2>
+<a href="mk_theorems.html">mk_theorems</a> <br/>
+<br/><br/><hr/><table>
+<tr>
+<td>Global Index</td>
+<td>A</td>
+<td>B</td>
+<td>C</td>
+<td>D</td>
+<td>E</td>
+<td>F</td>
+<td>G</td>
+<td>H</td>
+<td>I</td>
+<td>J</td>
+<td>K</td>
+<td>L</td>
+<td><a href="index.html#global_M">M</a></td>
+<td>N</td>
+<td>O</td>
+<td>P</td>
+<td>Q</td>
+<td>R</td>
+<td>S</td>
+<td>T</td>
+<td>U</td>
+<td>V</td>
+<td>W</td>
+<td>X</td>
+<td>Y</td>
+<td>Z</td>
+<td>_</td>
+<td>other</td>
+<td>(1 entry)</td>
+</tr>
+<tr>
+<td>Library Index</td>
+<td>A</td>
+<td>B</td>
+<td>C</td>
+<td>D</td>
+<td>E</td>
+<td>F</td>
+<td>G</td>
+<td>H</td>
+<td>I</td>
+<td>J</td>
+<td>K</td>
+<td>L</td>
+<td><a href="index.html#library_M">M</a></td>
+<td>N</td>
+<td>O</td>
+<td>P</td>
+<td>Q</td>
+<td>R</td>
+<td>S</td>
+<td>T</td>
+<td>U</td>
+<td>V</td>
+<td>W</td>
+<td>X</td>
+<td>Y</td>
+<td>Z</td>
+<td>_</td>
+<td>other</td>
+<td>(1 entry)</td>
+</tr>
+</table>
+<hr/>This page has been generated by <a href="http://coq.inria.fr/">coqdoc</a>
+</div>
+
+</div>
+
+</body>
+</html>
