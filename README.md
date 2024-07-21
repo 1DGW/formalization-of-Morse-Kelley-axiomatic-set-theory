@@ -11,7 +11,7 @@ That is to say, every mathematical object (ordered pair, function, integer, etc.
 and only those classes belonging to some other ones are defined as sets. 
 The non-set classes are named “proper classes”.
 Monk, Rubin, and Mendelson submit that MK does what is expected of a set theory while being less cumbersome than ZFC.
-In fact, ZFC can be proven consistent in MK; MK is a proper extension of ZFC.
+In fact, ZFC can be proven consistent in MK.
 We consider that MK is a proper extension of ZFC and is convenient to utilize in formalization processes.
 
 This is a repository optimized from our previous [version](https://github.com/styzystyzy/Axiomatic_Set_Theory/) with the main changes being:
