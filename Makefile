@@ -1,17 +1,22 @@
+# Makefile for Coq project
 
-all: Makefile.coq
-	+make -f Makefile.coq all
+# Variables
+COQC = coqc
+COQFLAGS = -Q . ""
 
-clean: Makefile.coq
-	+make -f Makefile.coq clean
-	rm -f Makefile.coq
+# Dependencies
+all: mk_theorems.vo
 
-Makefile.coq: Make
-	$(COQBIN)coq_makefile -f Make -o Makefile.coq
+mk_structure.vo: mk_structure.v
+	$(COQC) $(COQFLAGS) mk_structure.v
 
-Make: ;
+mk_theorems.vo: mk_structure.vo mk_theorems.v
+	$(COQC) $(COQFLAGS) mk_theorems.v
 
-%: Makefile.coq
-	+make -f Makefile.coq $@
+install: all
+	@mkdir -p /usr/local/coq
+	@cp *.vo *.glob /usr/local/coq
+	@echo "Files installed to /usr/local/coq"
 
-.PHONY: all clean
+clean:
+	rm -f *.vo *.glob
