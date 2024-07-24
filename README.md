@@ -27,7 +27,7 @@ mk_theorems.v  --  the formalization and verification of all the theorems in MK.
 **Note**: mk_theorems.v is dependent upon mk_structure.v
 
 # Authors
-This project is implemented by Wensheng Yu<wsyu@bupt.edu.cn>, Tianyu sun, Yaoshun Fu, Dakai Guo, Si Chen, Qimeng Zhang and Guowei Dou<dgw@bupt.edu.cn>.
+This project is implemented by Wensheng Yu<wsyu@bupt.edu.cn>, Tianyu sun, Yaoshun Fu, Sheng Yan, Dakai Guo, Si Chen, Qimeng Zhang and Guowei Dou<dgw@bupt.edu.cn>.
 
 Beijing Key Laboratory of Space-ground Interconnection and Convergence, School of Electronic Engineering, Beijing University of Posts and Telecommunications, Beijing
 
